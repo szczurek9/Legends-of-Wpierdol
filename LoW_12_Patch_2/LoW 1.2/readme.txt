@@ -13,7 +13,7 @@ Zawartosć:
   LoW Engine v.1.0 - Copyright @ 2025 szczurek9
 - Kreator poziomów
   LoW Level Creator version 1.0 - Copyright @ 2025 szczurek9
-  (ścierzka: /Legends of Wpierdol 1.2/LoW 1.2/game/levels/kreator_poziomow.bat )
+  (ścieżka: /Legends of Wpierdol 1.2/LoW 1.2/game/levels/kreator_poziomow.bat )
 - Ikona do ustawienia na ikonę skrótu do gry np. na pulpit
 
 Jak zagrać?:
