@@ -1,8 +1,0 @@
-enemy_name=Tadeusz Soplica
-enemy_hp=100
-enemy_dmg=50
-enemy_attack_chance=75
-player_miss_chance=75
-reward_money=50
-wait_hp_bonus=5
-lvl_up=

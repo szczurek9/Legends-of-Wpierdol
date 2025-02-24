@@ -1,8 +1,0 @@
-enemy_name=Kasti
-enemy_hp=250
-enemy_dmg=100
-enemy_attack_chance=75
-player_miss_chance=30
-reward_money=75
-wait_hp_bonus=10
-lvl_up=W sklepie sa nowe bronie

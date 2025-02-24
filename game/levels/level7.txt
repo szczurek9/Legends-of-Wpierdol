@@ -1,8 +1,0 @@
-enemy_name=Zul
-enemy_hp=50
-enemy_dmg=50
-enemy_attack_chance=50
-player_miss_chance=50
-reward_money=25
-wait_hp_bonus=2
-lvl_up=

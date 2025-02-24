@@ -1,8 +1,0 @@
-enemy_name=Lodowka Samsung RB34C672DSA
-enemy_hp=150
-enemy_dmg=10
-enemy_attack_chance=90
-player_miss_chance=5
-reward_money=15
-wait_hp_bonus=5
-lvl_up=

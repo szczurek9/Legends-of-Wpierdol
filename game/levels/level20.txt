@@ -1,8 +1,0 @@
-enemy_name=Hatsune Miku
-enemy_hp=1000
-enemy_dmg=150
-enemy_attack_chance=25
-player_miss_chance=75
-reward_money=500
-wait_hp_bonus=10
-lvl_up=Miku jest teraz w twoim WIFI

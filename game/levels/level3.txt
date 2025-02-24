@@ -1,8 +1,0 @@
-enemy_name=Twoja crush
-enemy_hp=30
-enemy_dmg=10
-enemy_attack_chance=20
-player_miss_chance=20
-reward_money=25
-wait_hp_bonus=2
-lvl_up=

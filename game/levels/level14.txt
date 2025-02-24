@@ -1,8 +1,0 @@
-enemy_name=Odlamek skorupki od jajka ktory ci wpadl do miski
-enemy_hp=250
-enemy_dmg=1
-enemy_attack_chance=95
-player_miss_chance=95
-reward_money=0
-wait_hp_bonus=2
-lvl_up=Wkurwia co nie
