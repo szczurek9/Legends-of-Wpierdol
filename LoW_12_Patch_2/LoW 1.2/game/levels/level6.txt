@@ -1,0 +1,8 @@
+enemy_name=Thanos ze squid game
+enemy_hp=50
+enemy_dmg=30
+enemy_attack_chance=25
+player_miss_chance=10
+reward_money=30
+wait_hp_bonus=2
+lvl_up=good luck

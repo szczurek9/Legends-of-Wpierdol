@@ -1,0 +1,8 @@
+enemy_name=Baby nigger
+enemy_hp=15
+enemy_dmg=10
+enemy_attack_chance=25
+player_miss_chance=25
+reward_money=20
+wait_hp_bonus=1
+lvl_up=
