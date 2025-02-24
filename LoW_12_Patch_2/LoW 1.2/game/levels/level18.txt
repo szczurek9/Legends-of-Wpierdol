@@ -1,0 +1,8 @@
+enemy_name=Vesemir
+enemy_hp=150
+enemy_dmg=50
+enemy_attack_chance=65
+player_miss_chance=65
+reward_money=10
+wait_hp_bonus=7
+lvl_up=Geralt nie bedzie zadowolony

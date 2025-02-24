@@ -1,0 +1,8 @@
+enemy_name=Skibidi Toilet
+enemy_hp=500
+enemy_dmg=120
+enemy_attack_chance=30
+player_miss_chance=30
+reward_money=200
+wait_hp_bonus=10
+lvl_up=BRR SKIBIDI TOILET GONI MNIE SPIEWAJAC TE PIOSENKE POMAGA MI KAMERAMEN LECIMY RATOWAC ZIEMIE JESTESMY NIEPOKONANI SKIBIDI SKIBIDI TE WOJNE WYGRYWAMY SKIBIDI SKIBIDI

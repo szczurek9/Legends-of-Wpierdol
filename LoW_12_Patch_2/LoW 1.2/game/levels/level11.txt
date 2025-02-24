@@ -1,0 +1,8 @@
+enemy_name=Salesman ze squid game
+enemy_hp=75
+enemy_dmg=50
+enemy_attack_chance=60
+player_miss_chance=25
+reward_money=45
+wait_hp_bonus=3
+lvl_up=Gratulacje w wygraniu w rosyjska ruletke
