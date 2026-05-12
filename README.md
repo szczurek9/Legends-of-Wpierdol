@@ -18,7 +18,3 @@ System requierments:
 - 64-bit Windows 10/11 or Linux (through Wine)
 - 1 MB free on your hard drive
 Download through Releases on GitHub
-
-*VC Redist 2015 installed for VC version*.
-
-*For non VC version nothing else.*
