@@ -17,4 +17,5 @@ Turn-based fighting game running in your console!
 System requierments:
 - 64-bit Windows 10/11 or Linux (through Wine)
 - 1 MB free on your hard drive
+
 Download through Releases on GitHub
