@@ -15,7 +15,9 @@ Turn-based fighting game running in your console!
 - More engaging gameplay!
 ### What are you waiting for? Download and play!
 System requierments:
-- 64-bit Windows 10/11 or Linux (through Wine)
+- Windows 10/11 or Linux (through Wine)
 - 1 MB free on your hard drive
 
 Download through Releases on GitHub
+
+**Download a version that is supported by youd cpu architekture. Legends of Wpierdol is avaiable on 32-bit systems (x86) and 64-bit systems (x64)*
