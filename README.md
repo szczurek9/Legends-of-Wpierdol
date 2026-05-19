@@ -19,5 +19,3 @@ System requierments:
 - 1 MB free on your hard drive
 
 Download through Releases on GitHub
-
-**Download a version that is supported by youd cpu architekture. Legends of Wpierdol is avaiable on 32-bit systems (x86) and 64-bit systems (x64)*
