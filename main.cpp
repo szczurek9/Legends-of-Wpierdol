@@ -29,7 +29,7 @@ void game_intro() {
 
             for (int i = 0; i < choice_amount; i++) {
                 if (i == choice)
-                    cout << "	> " << choices[i] << endl;
+                    cout << "	➤  " << choices[i] << endl;
                 else
                     cout << "	  " << choices[i] << endl;
             }
@@ -58,7 +58,7 @@ void game_intro() {
                     }
                 }
                 else if (choice == 1) {
-                    remove("save.sav");
+                    remove("save.LoW_save");
                     break;
                 }
             }
@@ -98,13 +98,13 @@ int main() {
 
     while (true) {
         clear_screen();
-        cout << endl << "    Legends of Wpierdol\n\n";
+        cout << endl << "	Legends of Wpierdol\n\n";
 
         for (int i = 0; i < choice_amount; i++) {
             if (i == choice)
-                cout << "    > " << choices[i] << endl;
+                cout << "	➤  " << choices[i] << endl;
             else
-                cout << "      " << choices[i] << endl;
+                cout << "	  " << choices[i] << endl;
         }
 
         keyboard_button = _getch();

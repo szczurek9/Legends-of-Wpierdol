@@ -8,8 +8,12 @@ using namespace std;
 
 void game_battle() {
 
-    const int choice_amount = 2;
-    string choices[choice_amount] = { "Walcz", "Uciekaj" };
+    const int choice_amount = 3;
+    string choices[choice_amount] = {
+        "Walcz",
+        "Użyj Mikstury",
+        "Uciekaj"
+    };
 
     int enemyIndex = player_level - 1;
 
@@ -35,23 +39,25 @@ void game_battle() {
 
         clear_screen();
         cout << endl;
-        cout << "	Lvl: " << player_level << " | Runda: " << current_wave << " z " << total_waves << endl;
-        cout << "	Twoje HP: ";
-        draw_hp_bar(player_health, player_maxhealth);
+        cout << "	Lvl: " << player_level << " | Runda: " << current_wave << " z " << total_waves << "\n\n";
 
-        cout << endl; 
+        cout << "	                    " << enemy[enemyIndex].name << "\n	                    ";
+        draw_enemy_hp_bar(current_enemy_health, enemy[enemyIndex].health);
+
+        cout << endl;
+        cout << "	                    DMG przeciwnika: " << enemy[enemyIndex].damage << endl;
+        cout << endl;
+
+        cout << "	" << nickname << ":\n       ";
+        draw_player_hp_bar(player_health, player_maxhealth);
+
+        cout << endl;
         cout << "	Broń: " << player_weapon_name << " - " << player_weapon_damage << " DMG" << endl;
-
-        cout << "	" << enemy[enemyIndex].name << ": ";
-        draw_hp_bar(current_enemy_health, enemy[enemyIndex].health);
-
-        cout << endl;
-        cout << "	DMG przeciwnika: " << enemy[enemyIndex].damage << endl;
-        cout << endl;
+        cout << "	Mikstury Zdrowia: " << player_health_potion << "\n\n";
 
         for (int i = 0; i < choice_amount; i++) {
             if (i == choice)
-                cout << "	> " << choices[i] << endl;
+                cout << "	➤  " << choices[i] << endl;
             else
                 cout << "	  " << choices[i] << endl;
         }
@@ -116,7 +122,7 @@ void game_battle() {
                     if (current_wave > total_waves) {
                         cout << "	Gratulacje! Przeszłeś poziom " << player_level << "!\n" << endl;
                         player_level++;
-                        player_used_escape = false;
+                        player_escape_count = 0;
                         save_game();
                         pause_game();
                         return;
@@ -129,10 +135,31 @@ void game_battle() {
 
                 int enemyAttack = rand() % 100;
                 if (enemyAttack < enemy[enemyIndex].atk_chance) {
-                    player_health -= enemy[enemyIndex].damage;
+                    float armorReduction = player_armor * 0.75f;
+
+                    int originalDamage = enemy[enemyIndex].damage;
+
+                    int finalDamage = originalDamage - (int)armorReduction;
+
+                    if (finalDamage < 1)
+                        finalDamage = 1;
+
+                    int amountOfDamageReducted = originalDamage - finalDamage;
+
+                    player_health -= finalDamage;
+
                     clear_screen();
                     cout << endl << "	Tura przeciwnika!\n" << endl;
-                    cout << "	Przeciwnik zadał Ci " << enemy[enemyIndex].damage << " obrażeń!\n" << endl;
+
+                    if (amountOfDamageReducted > 0) {
+                        cout << "	Obrażenia przeciwnika zredukowane o: "
+                            << amountOfDamageReducted << "!\n";
+                    }
+
+                    cout << "	Przeciwnik zadał Ci "
+                        << finalDamage
+                        << " obrażeń!\n" << endl;
+
                     pause_game();
                 }
                 else {
@@ -152,9 +179,55 @@ void game_battle() {
 
             else if (choice == 1) {
 
-                if (player_used_escape) {
+                if (player_health_potion <= 0) {
+
                     clear_screen();
-                    cout << endl << "	Możesz uciec tylko raz na poziom!\n" << endl;
+
+                    cout << "\n	Nie masz żadnych mikstur!\n\n";
+
+                    pause_game();
+                    continue;
+                }
+
+                int healAmount = (int)(player_maxhealth * 0.05f);
+
+                if (healAmount < 1)
+                    healAmount = 1;
+
+                player_health += healAmount;
+
+                if (player_health > player_maxhealth)
+                    player_health = player_maxhealth;
+
+                player_health_potion--;
+
+                clear_screen();
+
+                cout << "\n	Użyto Mikstury Zdrowia!\n";
+                cout << "	Odzyskano " << healAmount << " HP!\n";
+                cout << "	Pozostało mikstur: "
+                    << player_health_potion
+                    << "\n\n";
+
+                pause_game();
+            }
+
+            else if (choice == 2) {
+
+                int maxEscapes = 1;
+
+                if (player_escape_master)
+                    maxEscapes = 2;
+
+                if (player_escape_count >= maxEscapes) {
+                    clear_screen();
+                    cout << endl;
+
+                    if (player_escape_master)
+                        cout << "	Wykorzystałeś już obie ucieczki na tym poziomie!\n" << endl;
+                    else
+                        cout << "	Możesz uciec tylko raz na poziom!\n" << endl;
+
                     pause_game();
                     continue;
                 }
@@ -165,7 +238,7 @@ void game_battle() {
                 if (player_health > player_maxhealth)
                     player_health = player_maxhealth;
 
-                player_used_escape = true;
+                player_escape_count++;
 
                 cout << endl;
                 cout << "	Uciekasz z pola walki!\n";

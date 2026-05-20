@@ -60,8 +60,14 @@ void debug_console() {
 }
 
 void game_menu() {
-    const int choice_amount = 4;
-    string choices[choice_amount] = { "Graj", "Sklep", "Wzmocnienia i Umiejętności", "Opcje" };
+    const int choice_amount = 5;
+    string choices[choice_amount] = {
+        "Graj",
+        "Sklep",
+        "Ekwipunek",
+        "Wzmocnienia i Umiejętności",
+        "Opcje"
+    };
 
     while (true) {
         int choice = 0;
@@ -70,15 +76,14 @@ void game_menu() {
         while (true) {
             clear_screen();
             cout << endl;
-            cout << "	Nick: " << nickname << endl;
-            cout << "	LVL: " << player_level << endl;
-            cout << "	HP: " << player_health << "/" << player_maxhealth << endl;
+            cout << "	Nick: " << nickname << " | LVL: " << player_level << endl;
+            cout << "	HP: " << player_health << "/" << player_maxhealth << " | Pancerz: " << player_armor << "\n";
             cout << "	Hajs: $" << player_money << endl;
             cout << "	Broń: " << player_weapon_name << " - " << player_weapon_damage << " DMG" << endl << endl;
 
             for (int i = 0; i < choice_amount; i++) {
                 if (i == choice)
-                    cout << "	> " << choices[i] << endl;
+                    cout << "	➤  " << choices[i] << endl;
                 else
                     cout << "	  " << choices[i] << endl;
             }
@@ -107,8 +112,9 @@ void game_menu() {
         switch (choice) {
         case 0: game_battle(); break;
         case 1: game_shop(); break;
-        case 2: game_skills(); break;
-        case 3: game_options(); break;
+        case 2: game_inventory(); break;
+        case 3: game_skills(); break;
+        case 4: game_options(); break;
         }
     }
 }
@@ -157,7 +163,7 @@ void game_help() {
 
             for (int i = 0; i < choice_amount; i++) {
                 if (i == choice)
-                    cout << "	> " << choices[i] << endl;
+                    cout << "	➤  " << choices[i] << endl;
                 else
                     cout << "	  " << choices[i] << endl;
             }
@@ -198,9 +204,9 @@ void game_credits() {
         cout << "	Balancing:\n	chyba szczurek9\n\n";
         cout << "	Writing:\n	też szczurek9\n\n";
         cout << "	Specjalne podziękowania:\n";
-        cout << "	Owcacejk, Mispolarny1, maximum412, Toster57\n";
+        cout << "	Owcacejk, Mispolarny1, Maximum412, Toster57\n";
         cout << "	Galaxy S22\n	Akali mains\n	Valve za przycisk `\n\n";
-        cout << "	Version: 1.0\n\n";
+        cout << "	Version: 1.1\n\n";
         keyboard_button = _getch();
         if (keyboard_button == 27) return;
     }
@@ -221,7 +227,7 @@ void game_options() {
 
             for (int i = 0; i < choice_amount; i++) {
                 if (i == choice)
-                    cout << "	> " << choices[i] << endl;
+                    cout << "	➤  " << choices[i] << endl;
                 else
                     cout << "	  " << choices[i] << endl;
             }
@@ -249,5 +255,83 @@ void game_options() {
         case 2: game_credits(); break;
         case 3: exit(0); break;
         }
+    }
+}
+
+void game_inventory() {
+
+    while (true) {
+
+        clear_screen();
+
+        cout << "\n	Ekwipunek\n\n";
+
+        if (inventory_count <= 0) {
+            cout << "	Brak przedmiotów.\n\n";
+            pause_game();
+            return;
+        }
+
+        for (int i = 0; i < inventory_count; i++) {
+            cout << "	" << i + 1 << ". " << inventory[i].name << " | DMG: " << inventory[i].damage << " | Sprzedaż: $" << (inventory[i].price * 40 / 100) << endl;
+        }
+
+        cout << "\n	0. Powrót";
+        cout << "\n\n	Wybierz: ";
+
+        int choice;
+        cin >> choice;
+
+        if (choice == 0)
+            return;
+
+        choice--;
+
+        if (choice < 0 || choice >= inventory_count)
+            continue;
+
+        clear_screen();
+
+        cout << "\n	" << inventory[choice].name << endl;
+        cout << "	1. Załóż\n";
+        cout << "	2. Sprzedaj\n";
+        cout << "	0. Powrót\n\n";
+
+        int action;
+        cin >> action;
+
+        if (action == 1) {
+
+            string oldName = player_weapon_name;
+            int oldDamage = player_weapon_damage;
+            int oldPrice = player_weapon_price;
+
+            player_weapon_name = inventory[choice].name;
+            player_weapon_damage = inventory[choice].damage;
+            player_weapon_price = inventory[choice].price;
+
+            inventory[choice].name = oldName;
+            inventory[choice].damage = oldDamage;
+            inventory[choice].price = oldPrice;
+
+            cout << "\n	Założono broń!\n";
+        }
+        else if (action == 2) {
+
+            int money = inventory[choice].price * 40 / 100;
+
+            player_money += money;
+
+            for (int i = choice; i < inventory_count - 1; i++) {
+
+                inventory[i] = inventory[i + 1];
+            }
+
+            inventory_count--;
+
+            cout << "\n	Sprzedano broń za $" << money << "!\n";
+        }
+
+        pause_game();
     }
 }

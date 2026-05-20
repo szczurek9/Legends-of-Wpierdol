@@ -14,12 +14,21 @@ int player_lifesteal = 0;
 int player_bonus_health = 0;
 int player_bonus_accuracy = 0;
 
+int player_armor = 0;
+
 const int MAX_LIFESTEAL = 20;
 const int MAX_ACCURACY = 30;
+
+bool player_escape_master = false;
+int player_escape_count = 0;
 
 int current_wave;
 int total_waves;
 int current_enemy_health;
+
+int player_weapon_price = 0;
+
+int player_health_potion = 0;
 
 battle_enemy enemy[] = {
     {1, "Menel spod Żabki", 30, 3, 25, 95, 5, 1, 5},
@@ -80,7 +89,7 @@ shop_weapons shop[] = {
     {"Miecze Yone", 850, 390},
     {"Młot Mordekaisera", 1200, 475},
     {"Shurikeny Akali", 1600, 527},
-    {"Red Queen", 2300, 700},
+    {"Yamato", 2300, 700},
     {"Ebony & Ivory", 5000, 820},
     {"Mantis Blades", 6500, 930},
     {"Malorian 3516", 10000, 1000},
@@ -89,12 +98,19 @@ shop_weapons shop[] = {
 };
 
 skill_upgrade skills[] = {
-    {"Wampiryczne Ostrze", 600, "	Leczy za 10% zadanych obrazen (maksymalnie 20%)"},
-    {"Skała Zdrowia", 200, "	+50 maksymalnego HP"},
-    {"Woda Życia", 800, "	+210 maksymalnego HP"},
-    {"Kryształ Skupienia", 450, "	15% mniejsza szansa na nietrafienie ataku (maksymalnie 30%)"}
+    {"Wampiryczne Ostrze", 600, "   Leczy za 10% zadanych obrazen (maksymalnie 20%)"},
+    {"Skała Zdrowia", 200, "    +50 maksymalnego HP"},
+    {"Woda Życia", 800, "   +210 maksymalnego HP"},
+    {"Kryształ Skupienia", 450, "   15% mniejsza szansa na nietrafienie ataku (maksymalnie 30%)"},
+    {"Kolczuga", 150, " +15 punktów pancerza"},
+    {"Mistrz Ucieczki", 5000, "   Dodatkowy raz ucieczki w każdej rundzie"},
+    {"Mikstura Zdrowia", 50, "  Leczy 5% maksymalnego HP podczas walki"}
 };
 
 const int enemy_amount = sizeof(enemy) / sizeof(enemy[0]);
 const int shop_weapon_amount = sizeof(shop) / sizeof(shop[0]);
 const int skills_amount = sizeof(skills) / sizeof(skills[0]);
+
+InventoryWeapon inventory[max_inventory];
+
+int inventory_count = 0;

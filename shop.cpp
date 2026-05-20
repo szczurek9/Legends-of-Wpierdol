@@ -12,8 +12,17 @@ void shop_buy_weapon(int id) {
 
     if (player_money >= shop[id].price) {
         player_money -= shop[id].price;
+        if (player_weapon_name != "Pięści") {
+
+            inventory[inventory_count].name = player_weapon_name;
+            inventory[inventory_count].damage = player_weapon_damage;
+            inventory[inventory_count].price = player_weapon_price;
+
+            inventory_count++;
+        }
         player_weapon_name = shop[id].name;
         player_weapon_damage = shop[id].damage;
+        player_weapon_price = shop[id].price;
         cout << endl << "	Kupiono!" << endl << endl;
         pause_game();
     }
@@ -36,7 +45,7 @@ void game_shop() {
 
         for (int i = 0; i < shop_weapon_amount; i++) {
             if (i == choice)
-                cout << "	> " << shop[i].damage << " DMG | $" << shop[i].price << " - " << shop[i].name << endl;
+                cout << "	➤  " << shop[i].damage << " DMG | $" << shop[i].price << " - " << shop[i].name << endl;
             else
                 cout << "	  " << shop[i].damage << " DMG | $" << shop[i].price << " - " << shop[i].name << endl;
         }
@@ -127,7 +136,22 @@ void game_skills() {
                     player_bonus_accuracy += 15;
                     if (player_bonus_accuracy > MAX_ACCURACY) player_bonus_accuracy = MAX_ACCURACY;
                     break;
+                case 4:
+                    player_armor += 15;
+                    break;
+                case 5:
+                    if (player_escape_master) {
+                        cout << "\n	Masz już to ulepszenie!\n";
+                    }
+                    else {
+                        player_escape_master = true;
+                    }
+                    break;
+                case 6:
+                    player_health_potion++;
+                    break;
                 }
+
 
                 clear_screen();
                 cout << endl << "	Kupiono: " << skills[choice].name << endl << endl;

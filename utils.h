@@ -49,14 +49,49 @@ static void pause_game() {
     _getch();
 }
 
-static void draw_hp_bar(int current, int maximum, int width = 20) {
+static void draw_enemy_hp_bar(int current, int maximum, int width = 20) {
+
+    float ratio = (float)current / maximum;
+    int filled = (int)(ratio * width);
+
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    cout << " ♥ ";
+    cout << current << "/" << maximum;
+    cout << " [";
+
+    for (int i = 0; i < width; i++) {
+
+        if (i < filled) {
+
+            if (ratio > 0.6f)
+                SetConsoleTextAttribute(hConsole, 10);
+            else if (ratio > 0.3f)
+                SetConsoleTextAttribute(hConsole, 14);
+            else
+                SetConsoleTextAttribute(hConsole, 12);
+
+            cout << "█";
+        }
+        else {
+
+            SetConsoleTextAttribute(hConsole, 8);
+            cout << "░";
+        }
+    }
+
+    SetConsoleTextAttribute(hConsole, 7);
+
+    cout << "] ";
+}
+
+static void draw_player_hp_bar(int current, int maximum, int width = 20) {
 
     float ratio = (float)current / maximum;
     int filled = (int)(ratio * width);
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    cout << "[";
+    cout << " ♥ [";
 
     for (int i = 0; i < width; i++) {
 
