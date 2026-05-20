@@ -2,7 +2,9 @@
 
 #include <iostream>
 #include <conio.h>
-#include <windows.h>
+#define byte win_byte_override
+#include <Windows.h>
+#undef byte
 
 using namespace std;
 
