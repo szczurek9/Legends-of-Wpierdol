@@ -12,7 +12,7 @@ void shop_buy_weapon(int id) {
 
     if (player_money >= shop[id].price) {
         player_money -= shop[id].price;
-        if (player_weapon_name != "Pięści") {
+        if (player_weapon_name != "nic") {
 
             inventory[inventory_count].name = player_weapon_name;
             inventory[inventory_count].damage = player_weapon_damage;
