@@ -15,10 +15,11 @@ void debug_console() {
 
     cout << "=== DEBUG CONSOLE ===\n\n";
     cout << "Komendy:\n";
-    cout << "money <liczba>\n";
-    cout << "health <liczba>\n";
-    cout << "level <liczba>\n";
-    cout << "weapon <id>\n\n";
+    cout << "money <liczba> - dodaj pieniądze\n";
+    cout << "health <liczba> - ustaw ilosc zdrowia\n";
+    cout << "level <liczba> - ustaw level\n";
+    cout << "weapon <id> - ustaw broń\n";
+    cout << "back back- powrót do menu \n\n";
     cout << "> ";
 
     cin >> command >> value;
@@ -50,6 +51,9 @@ void debug_console() {
             cout << "\nNiepoprawne ID broni!\n";
         }
     }
+    else if (command == "back") {
+        cout << "\nPowrót!" << endl;
+    }
     else {
         cout << "\nNieznana komenda!\n";
     }
@@ -60,12 +64,12 @@ void debug_console() {
 }
 
 void game_menu() {
-    const int choice_amount = 5;
+    const int choice_amount = 4;
+
     string choices[choice_amount] = {
         "Graj",
-        "Sklep",
+        "Zbrojownia",
         "Ekwipunek",
-        "Wzmocnienia i Umiejętności",
         "Opcje"
     };
 
@@ -111,10 +115,9 @@ void game_menu() {
 
         switch (choice) {
         case 0: game_battle(); break;
-        case 1: game_shop(); break;
+        case 1: game_armory(); break;
         case 2: game_inventory(); break;
-        case 3: game_skills(); break;
-        case 4: game_options(); break;
+        case 3: game_options(); break;
         }
     }
 }
@@ -139,10 +142,11 @@ void game_help_shop() {
     while (true) {
         clear_screen();
         cout << "ESC - Powrót\n\n";
-        cout << "	Sklep, Wzmocnienia i Umiejętności\n";
-        cout << "		1. W Legends of Wpierdol sklep działa w taki sposób że zakup broni usuwa\n";
+        cout << "	Zbrojownia\n";
+        cout << "		1. W Legends of Wpierdol sklep działa w taki sposób że zakup broni wrzuca\n";
         cout << "		   aktualną broń z twojego ekwipunku.\n\n";
         cout << "		2. Wzmocnienia dają dodatkowe statystyki do gracza.\n";
+        cout << "       3. Umiejętności dają dodatkowe, unikalne statystyki.\n";
         keyboard_button = _getch();
         if (keyboard_button == 27) return;
     }
@@ -201,12 +205,12 @@ void game_credits() {
         cout << "	Legends of Wpierdol\n\n";
         cout << "	Programowanie:\n	szczurek9\n\n";
         cout << "	Game Design:\n	szczurek9\n\n";
-        cout << "	Balancing:\n	chyba szczurek9\n\n";
-        cout << "	Writing:\n	też szczurek9\n\n";
+        cout << "	Balancing:\n	na pewno nie szczurek9\n\n";
+        cout << "	Game Testing: Mispolarny1\n\n";
         cout << "	Specjalne podziękowania:\n";
-        cout << "	Owcacejk, Mispolarny1, Maximum412, Toster57\n";
+        cout << "	Owcacejk, Maximum412, Toster57\n";
         cout << "	Galaxy S22\n	Akali mains\n	Valve za przycisk `\n\n";
-        cout << "	Version: 1.1\n\n";
+        cout << "	Version: 1.1a\n\n";
         keyboard_button = _getch();
         if (keyboard_button == 27) return;
     }
@@ -333,5 +337,83 @@ void game_inventory() {
         }
 
         pause_game();
+    }
+}
+
+void game_armory() {
+
+    const int choice_amount = 4;
+
+    string choices[choice_amount] = {
+        "Rynek Broni",
+        "Wzmocnienia",
+        "Umiejętności",
+        "Alchemik"
+    };
+
+    while (true) {
+
+        int choice = 0;
+        int keyboard_button;
+
+        while (true) {
+
+            clear_screen();
+            cout << "ESC - Powrót\n\n";
+            cout << "	Zbrojownia\n\n";
+
+            for (int i = 0; i < choice_amount; i++) {
+                if (i == choice)
+                    cout << "	➤  " << choices[i] << endl;
+                else
+                    cout << "	  " << choices[i] << endl;
+            }
+
+            keyboard_button = _getch();
+
+            if (keyboard_button == 224) {
+
+                keyboard_button = _getch();
+
+                if (keyboard_button == 72) {
+
+                    choice--;
+
+                    if (choice < 0)
+                        choice = choice_amount - 1;
+                }
+                else if (keyboard_button == 80) {
+
+                    choice++;
+
+                    if (choice >= choice_amount)
+                        choice = 0;
+                }
+            }
+            else if (keyboard_button == 13) {
+                break;
+            }
+            else if (keyboard_button == 27) {
+                return;
+            }
+        }
+
+        switch (choice) {
+
+        case 0:
+            game_shop();
+            break;
+
+        case 1:
+            game_upgrades();
+            break;
+
+        case 2:
+            game_abilities();
+            break;
+        case 3:
+            game_consumables();
+            break;
+        }
     }
 }

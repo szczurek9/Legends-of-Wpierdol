@@ -8,6 +8,8 @@ using namespace std;
 
 void game_battle() {
 
+    clock_t battle_start = clock();
+
     const int choice_amount = 3;
     string choices[choice_amount] = {
         "Walcz",
@@ -112,11 +114,31 @@ void game_battle() {
                 }
 
                 if (current_enemy_health <= 0) {
-                    clear_screen();
-                    cout << endl << "	Twoja tura!\n" << endl;
-                    cout << "	Przeciwnik pokonany!\n" << endl;
+                    clock_t battle_end = clock();
+                    float seconds = (float)(battle_end - battle_start) / CLOCKS_PER_SEC;
 
-                    player_money += enemy[enemyIndex].kill_reward;
+                    float multiplier = 1.0f;
+
+                    if (seconds < 15)
+                        multiplier = 2.0f;
+                    else if (seconds < 30)
+                        multiplier = 1.5f;
+                    else if (seconds < 60)
+                        multiplier = 1.2f;
+
+                    int base_reward = enemy[enemyIndex].kill_reward;
+                    int final_reward = (int)(base_reward * multiplier);
+
+                    player_money += final_reward;
+                    
+                    int bonus_money_amount = final_reward - base_reward;
+
+                    clear_screen();
+                    cout << endl;
+                    cout << "	Twoja tura!" << endl;
+                    cout << "	Przeciwnik pokonany!" << endl;
+                    cout << "	Otrzymujesz: $" << base_reward << " + $" << bonus_money_amount << " za czas walki!" << endl;
+                    cout << "	Suma: $" << final_reward << endl;
                     current_wave++;
 
                     if (current_wave > total_waves) {
@@ -135,11 +157,11 @@ void game_battle() {
 
                 int enemyAttack = rand() % 100;
                 if (enemyAttack < enemy[enemyIndex].atk_chance) {
-                    float armorReduction = player_armor * 0.75f;
+                    float reductionPercent = player_armor / (player_armor + 100.0f);
 
                     int originalDamage = enemy[enemyIndex].damage;
 
-                    int finalDamage = originalDamage - (int)armorReduction;
+                    int finalDamage = enemy[enemyIndex].damage * (1.0f - reductionPercent);
 
                     if (finalDamage < 1)
                         finalDamage = 1;
@@ -189,10 +211,13 @@ void game_battle() {
                     continue;
                 }
 
-                int healAmount = (int)(player_maxhealth * 0.05f);
+                int healAmount = (int)(20 + (player_maxhealth * 0.05f));
 
                 if (healAmount < 1)
                     healAmount = 1;
+
+                if (healAmount > 150)
+                    healAmount = 150;
 
                 player_health += healAmount;
 

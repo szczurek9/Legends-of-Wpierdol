@@ -72,99 +72,328 @@ void game_shop() {
     }
 }
 
-void game_skills() {
+void game_abilities() {
+
     int choice = 0;
     int keyboard_button;
 
     while (true) {
+
         clear_screen();
-        cout << "ESC - Powrot\n\n";
-        cout << "	Wzmocnienia i Umiejetnosci\n\n";
+
+        cout << "ESC - Powrót\n\n";
+        cout << "	Umiejętności\n\n";
+
         cout << "	Hajs: $" << player_money << endl << endl;
 
-        for (int i = 0; i < skills_amount; i++) {
+        for (int i = 0; i < abilities_amount; i++) {
+
             if (i == choice)
-                cout << "	> " << skills[i].name << " | $" << skills[i].price << endl;
+                cout << "	➤  ";
             else
-                cout << "	  " << skills[i].name << " | $" << skills[i].price << endl;
-            cout << "	   " << skills[i].description << endl;
+                cout << "	  ";
+
+            cout << abilities[i].name << " | $" << abilities[i].price << endl;
+            cout << "	   " << abilities[i].description << endl;
         }
 
         keyboard_button = _getch();
 
         if (keyboard_button == 224) {
+
             keyboard_button = _getch();
+
             if (keyboard_button == 72) {
+
                 choice--;
-                if (choice < 0) choice = skills_amount - 1;
+
+                if (choice < 0)
+                    choice = abilities_amount - 1;
             }
             else if (keyboard_button == 80) {
+
                 choice++;
-                if (choice >= skills_amount) choice = 0;
+
+                if (choice >= abilities_amount)
+                    choice = 0;
             }
         }
         else if (keyboard_button == 13) {
-            if (player_money >= skills[choice].price) {
-                switch (choice) {
-                case 0:
-                    if (player_lifesteal >= MAX_LIFESTEAL) {
-                        clear_screen();
-                        cout << endl << "	Osiagnieto maksymalny poziom Wampirycznego Ostrza!\n" << endl;
-                        pause_game();
-                        continue;
-                    }
-                    player_lifesteal += 10;
-                    if (player_lifesteal > MAX_LIFESTEAL) player_lifesteal = MAX_LIFESTEAL;
-                    break;
-                case 1:
-                    player_bonus_health += 50;
-                    player_maxhealth += 50;
-                    player_health += 50;
-                    break;
-                case 2:
-                    player_bonus_health += 210;
-                    player_maxhealth += 210;
-                    player_health += 210;
-                    break;
-                case 3:
-                    if (player_bonus_accuracy >= MAX_ACCURACY) {
-                        clear_screen();
-                        cout << endl << "	Osiagnieto maksymalną ilość Kryształów Skupienia!\n" << endl;
-                        pause_game();
-                        continue;
-                    }
-                    player_bonus_accuracy += 15;
-                    if (player_bonus_accuracy > MAX_ACCURACY) player_bonus_accuracy = MAX_ACCURACY;
-                    break;
-                case 4:
-                    player_armor += 15;
-                    break;
-                case 5:
-                    if (player_escape_master) {
-                        cout << "\n	Masz już to ulepszenie!\n";
-                    }
-                    else {
-                        player_escape_master = true;
-                    }
-                    break;
-                case 6:
-                    player_health_potion++;
-                    break;
+
+            if (player_money < abilities[choice].price) {
+
+                clear_screen();
+
+                cout << "\n	Za mało hajsu!\n\n";
+
+                pause_game();
+                continue;
+            }
+
+            switch (choice) {
+
+            case 0:
+
+                if (player_lifesteal >= MAX_LIFESTEAL) {
+
+                    clear_screen();
+
+                    cout << "\n	Osiągnięto maksymalny poziom Wampirycznego Ostrza!\n\n";
+
+                    pause_game();
+                    continue;
                 }
 
+                player_lifesteal += 10;
 
-                clear_screen();
-                cout << endl << "	Kupiono: " << skills[choice].name << endl << endl;
-                player_money -= skills[choice].price;
-                pause_game();
+                if (player_lifesteal > MAX_LIFESTEAL)
+                    player_lifesteal = MAX_LIFESTEAL;
+
+                break;
+
+            case 1:
+
+                if (player_bonus_accuracy >= MAX_ACCURACY) {
+
+                    clear_screen();
+
+                    cout << "\n	Osiągnięto maksymalną ilość Kryształów Skupienia!\n\n";
+
+                    pause_game();
+                    continue;
+                }
+
+                player_bonus_accuracy += 15;
+
+                if (player_bonus_accuracy > MAX_ACCURACY)
+                    player_bonus_accuracy = MAX_ACCURACY;
+
+                break;
+
+            case 2:
+
+                if (player_escape_master) {
+
+                    clear_screen();
+
+                    cout << "\n	Masz już to ulepszenie!\n\n";
+
+                    pause_game();
+                    continue;
+                }
+
+                player_escape_master = true;
+
+                break;
             }
-            else {
-                clear_screen();
-                cout << endl << "	Za mało hajsu!\n" << endl;
-                pause_game();
-            }
+
+            player_money -= abilities[choice].price;
+
+            clear_screen();
+
+            cout << "\n	Kupiono: " << abilities[choice].name << "!\n\n";
+
+            pause_game();
         }
         else if (keyboard_button == 27) {
+
+            return;
+        }
+    }
+}
+
+void game_upgrades() {
+
+    int choice = 0;
+    int keyboard_button;
+
+    while (true) {
+
+        clear_screen();
+
+        cout << "ESC - Powrót\n\n";
+        cout << "	Wzmocnienia\n\n";
+
+        cout << "	Hajs: $" << player_money << "\n";
+        cout << "	HP: " << player_health << "/" << player_maxhealth << "\n";
+        cout << "	Pancerz: " << player_armor << "\n\n";
+
+        for (int i = 0; i < upgrades_amount; i++) {
+
+            if (i == choice)
+                cout << "	➤  ";
+            else
+                cout << "	  ";
+
+            cout << upgrades[i].name << " | $" << upgrades[i].price << endl;
+            cout << "	   " << upgrades[i].description << endl;
+        }
+
+        keyboard_button = _getch();
+
+        if (keyboard_button == 224) {
+
+            keyboard_button = _getch();
+
+            if (keyboard_button == 72) {
+
+                choice--;
+
+                if (choice < 0)
+                    choice = upgrades_amount - 1;
+            }
+            else if (keyboard_button == 80) {
+
+                choice++;
+
+                if (choice >= upgrades_amount)
+                    choice = 0;
+            }
+        }
+        else if (keyboard_button == 13) {
+
+            if (player_money < upgrades[choice].price) {
+
+                clear_screen();
+
+                cout << "\n	Za mało hajsu!\n\n";
+
+                pause_game();
+                continue;
+            }
+
+            switch (choice) {
+
+            case 0:
+
+                player_bonus_health += 50;
+                player_maxhealth += 50;
+                player_health += 50;
+
+                break;
+
+            case 1:
+
+                player_bonus_health += 160;
+                player_maxhealth += 160;
+                player_health += 160;
+
+                break;
+
+            case 2:
+
+                if (player_armor >= 90) {
+
+                    clear_screen();
+
+                    cout << "\n	Osiągnięto maksymalny poziom pancerza!\n\n";
+
+                    pause_game();
+                    continue;
+                }
+
+                player_armor += 15;
+
+                if (player_armor > 90)
+                    player_armor = 90;
+
+                break;
+            }
+
+            player_money -= upgrades[choice].price;
+
+            clear_screen();
+
+            cout << "\n	Kupiono: " << upgrades[choice].name << "!\n\n";
+
+            pause_game();
+        }
+        else if (keyboard_button == 27) {
+
+            return;
+        }
+    }
+}
+
+void game_consumables() {
+
+    int choice = 0;
+    int keyboard_button;
+
+    while (true) {
+
+        clear_screen();
+
+        cout << "ESC - Powrót\n\n";
+        cout << "	Alchemik\n\n";
+
+        cout << "	Hajs: $" << player_money << endl;
+        cout << "	Mikstury Zdrowia: " << player_health_potion << "\n\n";
+
+        for (int i = 0; i < consumables_amount; i++) {
+
+            if (i == choice)
+                cout << "	➤  ";
+            else
+                cout << "	  ";
+
+            cout << consumables[i].name << " | $" << consumables[i].price << endl;
+            cout << "	   " << consumables[i].description << endl;
+        }
+
+        keyboard_button = _getch();
+
+        if (keyboard_button == 224) {
+
+            keyboard_button = _getch();
+
+            if (keyboard_button == 72) {
+
+                choice--;
+
+                if (choice < 0)
+                    choice = consumables_amount - 1;
+            }
+            else if (keyboard_button == 80) {
+
+                choice++;
+
+                if (choice >= consumables_amount)
+                    choice = 0;
+            }
+        }
+        else if (keyboard_button == 13) {
+
+            if (player_money < consumables[choice].price) {
+
+                clear_screen();
+
+                cout << "\n	Za mało hajsu!\n\n";
+
+                pause_game();
+                continue;
+            }
+
+            switch (choice) {
+
+            case 0:
+
+                player_health_potion++;
+
+                break;
+            }
+
+            player_money -= consumables[choice].price;
+
+            clear_screen();
+
+            cout << "\n	Kupiono: " << consumables[choice].name << "!\n";
+            cout << "	Posiadasz teraz: " << player_health_potion << " mikstur.\n\n";
+
+            pause_game();
+        }
+        else if (keyboard_button == 27) {
+
             return;
         }
     }

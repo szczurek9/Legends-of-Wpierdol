@@ -66,6 +66,7 @@ void game_intro() {
     }
 
     remove("save.sav");
+    clear_screen();
     cout << endl << "	Podaj swój nick: " << endl;
     cin >> nickname;
 
@@ -82,12 +83,12 @@ void game_intro() {
 
 int main() {
 
-    SetConsoleTitleA("Legends of Wpierdol | by szczurek9");
-
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
 
     setlocale(LC_ALL, ".UTF8");
+
+    SetConsoleTitleA("Legends of Wpierdol | by szczurek9");
 
     srand(time(NULL));
 

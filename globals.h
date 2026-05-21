@@ -9,12 +9,6 @@ struct shop_weapons {
     int damage;
 };
 
-struct skill_upgrade {
-    string name;
-    int price;
-    string description;
-};
-
 struct battle_enemy {
     int lvl;
     string name;
@@ -31,6 +25,24 @@ struct InventoryWeapon {
     string name;
     int damage;
     int price;
+};
+
+struct upgrade_item {
+    string name;
+    int price;
+    string description;
+};
+
+struct skill_item {
+    string name;
+    int price;
+    string description;
+};
+
+struct consumable_item {
+    string name;
+    int price;
+    string description;
 };
 
 // Zmienne gracza
@@ -68,11 +80,17 @@ extern int current_enemy_health;
 // Tablice
 extern battle_enemy enemy[];
 extern shop_weapons shop[];
-extern skill_upgrade skills[];
 
 extern const int enemy_amount;
 extern const int shop_weapon_amount;
-extern const int skills_amount;
+
+extern upgrade_item upgrades[];
+extern skill_item abilities[];
+extern consumable_item consumables[];
+
+extern const int upgrades_amount;
+extern const int abilities_amount;
+extern const int consumables_amount;
 
 const int max_inventory = 50;
 
