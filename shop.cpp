@@ -184,7 +184,7 @@ void game_abilities() {
 
 				if (player_crit_chance > MAX_CRIT)
 					player_crit_chance = MAX_CRIT;
-
+				break;
 			case 3:
 
 				if (player_escape_master) {
