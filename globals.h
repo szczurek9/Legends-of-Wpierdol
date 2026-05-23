@@ -15,6 +15,7 @@ struct battle_enemy {
     int health;
     int damage;
     int atk_chance;
+    int crit_chance;
     int player_atk_chance;
     int dodge_chance;
     int wave;
@@ -64,6 +65,7 @@ extern int player_bonus_accuracy;
 
 extern const int MAX_LIFESTEAL;
 extern const int MAX_ACCURACY;
+extern const int MAX_CRIT;
 
 extern int player_armor;
 
@@ -71,6 +73,8 @@ extern bool player_escape_master;
 extern int player_escape_count;
 
 extern int player_health_potion;
+
+extern int player_crit_chance;
 
 // Fale
 extern int current_wave;
@@ -97,3 +101,13 @@ const int max_inventory = 50;
 extern InventoryWeapon inventory[max_inventory];
 
 extern int inventory_count;
+
+extern int player_precision_potion;
+extern int player_vampire_potion;
+
+extern int precision_bonus;
+extern int precision_turns;
+
+extern int vampire_bonus;
+extern int vampire_turns;
+

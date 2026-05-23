@@ -39,6 +39,17 @@ void save_game() {
 
     file << player_health_potion << endl;
 
+    file << player_precision_potion << endl;
+    file << player_vampire_potion << endl;
+
+    file << precision_bonus << endl;
+    file << precision_turns << endl;
+
+    file << vampire_bonus << endl;
+    file << vampire_turns << endl;
+
+    file << player_crit_chance << endl;
+
     file << inventory_count << endl;
 
     for (int i = 0; i < inventory_count; i++) {
@@ -80,6 +91,17 @@ bool load_game() {
     file >> player_escape_master;
 
     file >> player_health_potion;
+
+    file >> player_precision_potion;
+    file >> player_vampire_potion;
+
+    file >> precision_bonus;
+    file >> precision_turns;
+
+    file >> player_crit_chance;
+
+    file >> vampire_bonus;
+    file >> vampire_turns;
 
     file >> inventory_count;
 

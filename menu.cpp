@@ -19,7 +19,7 @@ void debug_console() {
     cout << "health <liczba> - ustaw ilosc zdrowia\n";
     cout << "level <liczba> - ustaw level\n";
     cout << "weapon <id> - ustaw broń\n";
-    cout << "back back- powrót do menu \n\n";
+    cout << "back 0 - powrót do menu \n\n";
     cout << "> ";
 
     cin >> command >> value;
@@ -52,6 +52,8 @@ void debug_console() {
         }
     }
     else if (command == "back") {
+        if (value != 0) value = 0;
+        player_money += value;
         cout << "\nPowrót!" << endl;
     }
     else {
@@ -210,7 +212,7 @@ void game_credits() {
         cout << "	Specjalne podziękowania:\n";
         cout << "	Owcacejk, Maximum412, Toster57\n";
         cout << "	Galaxy S22\n	Akali mains\n	Valve za przycisk `\n\n";
-        cout << "	Version: 1.1a\n\n";
+        cout << "	Version: 1.2\n\n";
         keyboard_button = _getch();
         if (keyboard_button == 27) return;
     }
