@@ -18,9 +18,5 @@ System requierments:
 - Windows 10/11 or Linux (through Wine)
 - 1 MB free on your hard drive
 
-Programming - szczurek9
-
-Ideas - Owcacejk
-
 Download through Releases on GitHub.
 You can get the source code in "master" branch of this repository
