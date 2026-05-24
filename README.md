@@ -20,7 +20,7 @@ System requierments:
 
 Programming - szczurek9
 
-Ideas - 
+Ideas - Owcacejk
 
 Download through Releases on GitHub.
 You can get the source code in "master" branch of this repository
