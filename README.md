@@ -19,6 +19,7 @@ System requierments:
 - 1 MB free on your hard drive
 
 Programming - szczurek9
+
 Ideas - 
 
 Download through Releases on GitHub.
