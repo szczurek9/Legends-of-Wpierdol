@@ -27,6 +27,7 @@ int current_wave;
 int total_waves;
 int current_enemy_health;
 int current_enemy_damage;
+int current_enemy_max_health;
 
 int player_weapon_price = 0;
 
@@ -89,10 +90,10 @@ battle_enemy enemy[] = {
 	{    35, "Gabe Newell",                   10000, 400,  75,  38,   30,   70,   true,  3,   350  },
 
 	{    36, "Kostecka",                      13000, 450,  74,  38,   28,   72,  false,  3,   330  },
-	{    37, "Walter White",                  15000, 500,  75,  40,   26,   74,  false,  3,   340  },
-	{    38, "Owcacejk",                      20000, 600,  76,  40,   24,   76,  false,  3,   367  },
-	{    39, "Pan Ryszard",                   25000, 700,  80,  40,   22,   78,  false,  3,   400  },
-	{    40, "Legenda Wpierdolu",             30000, 750,  90,  40,   20,   80,   true,  5,   500  }
+	{    37, "Walter White",                  14000, 500,  75,  40,   26,   74,  false,  3,   340  },
+	{    38, "Owcacejk",                      15000, 600,  76,  40,   24,   76,  false,  3,   367  },
+	{    39, "Pan Ryszard",                   16000, 700,  80,  40,   22,   78,  false,  3,   400  },
+	{    40, "Legenda Wpierdolu",             20000, 750,  90,  40,   20,   80,   true,  5,   500  }
 };
 
 shop_weapons shop[] = {

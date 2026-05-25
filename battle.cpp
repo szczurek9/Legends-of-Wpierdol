@@ -32,7 +32,21 @@ void game_battle() {
 
 	total_waves = enemy[enemyIndex].wave;
 	current_wave = 1;
-	current_enemy_health = enemy[enemyIndex].health;
+	if (enemy[enemyIndex].boss) {
+
+		float hpMultiplier =
+			1.0f + ((current_wave - 1) * 0.25f);
+
+		current_enemy_max_health =
+			(int)(enemy[enemyIndex].health * hpMultiplier);
+
+		current_enemy_health = current_enemy_max_health;
+	}
+	else {
+
+		current_enemy_max_health = enemy[enemyIndex].health;
+		current_enemy_health = enemy[enemyIndex].health;
+	}
 	current_enemy_damage = enemy[enemyIndex].damage;
 
 	int choice = 0;
@@ -45,7 +59,7 @@ void game_battle() {
 		cout << "	Lvl: " << player_level << " | Runda: " << current_wave << " z " << total_waves << "\n\n";
 
 		cout << "	                    " << enemy[enemyIndex].name << "\n	                    ";
-		draw_enemy_hp_bar(current_enemy_health, enemy[enemyIndex].health);
+		draw_enemy_hp_bar(current_enemy_health, current_enemy_max_health);
 
 		cout << endl;
 		cout << "	                    DMG przeciwnika: " << current_enemy_damage << endl;
@@ -207,7 +221,7 @@ void game_battle() {
 						return;
 					}
 
-					current_enemy_health = enemy[enemyIndex].health;
+					current_enemy_health = current_enemy_max_health;
 					pause_game();
 					continue;
 				}

@@ -82,8 +82,7 @@ extern int current_wave;
 extern int total_waves;
 extern int current_enemy_health;
 extern int current_enemy_damage;
-
-
+extern int current_enemy_max_health;
 // Tablice
 extern battle_enemy enemy[];
 extern shop_weapons shop[];
