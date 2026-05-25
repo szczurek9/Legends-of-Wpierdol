@@ -208,11 +208,11 @@ void game_credits() {
         cout << "	Programowanie:\n	szczurek9\n\n";
         cout << "	Game Design:\n	szczurek9\n\n";
         cout << "	Balancing:\n	na pewno nie szczurek9\n\n";
-        cout << "	Game Testing: Mispolarny1\n\n";
+        cout << "	Game Testing:\n	Owcacejk i Mispolarny1\n\n";
         cout << "	Specjalne podziękowania:\n";
-        cout << "	Owcacejk, Maximum412, Toster57\n";
+        cout << "	Maximum412, Toster57\n";
         cout << "	Galaxy S22\n	Akali mains\n	Valve za przycisk `\n\n";
-        cout << "	Version: 1.2\n\n";
+        cout << "	Version: 1.3\n\n";
         keyboard_button = _getch();
         if (keyboard_button == 27) return;
     }
