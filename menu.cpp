@@ -85,11 +85,11 @@ void game_menu() {
             cout << "	Nick: " << nickname << " | LVL: " << player_level << endl;
             cout << "	HP: " << player_health << "/" << player_maxhealth << " | Pancerz: " << player_armor << "\n";
             cout << "	Hajs: $" << player_money << endl;
-            cout << "	Broń: " << player_weapon_name << " - " << player_weapon_damage << " DMG" << endl << endl;
+            cout << "	Broń: " << player_weapon_name << " - " << player_weapon_damage << " DMG | Szansa na Kryta: " << player_crit_chance << "%" << endl << endl;
 
             for (int i = 0; i < choice_amount; i++) {
                 if (i == choice)
-                    cout << "	➤  " << choices[i] << endl;
+                    cout << "	►  " << choices[i] << endl;
                 else
                     cout << "	  " << choices[i] << endl;
             }
@@ -148,7 +148,7 @@ void game_help_shop() {
         cout << "		1. W Legends of Wpierdol sklep działa w taki sposób że zakup broni wrzuca\n";
         cout << "		   aktualną broń z twojego ekwipunku.\n\n";
         cout << "		2. Wzmocnienia dają dodatkowe statystyki do gracza.\n";
-        cout << "       3. Umiejętności dają dodatkowe, unikalne statystyki.\n";
+        cout << "		3. Umiejętności dają dodatkowe, unikalne statystyki.\n";
         keyboard_button = _getch();
         if (keyboard_button == 27) return;
     }
@@ -169,7 +169,7 @@ void game_help() {
 
             for (int i = 0; i < choice_amount; i++) {
                 if (i == choice)
-                    cout << "	➤  " << choices[i] << endl;
+                    cout << "	►  " << choices[i] << endl;
                 else
                     cout << "	  " << choices[i] << endl;
             }
@@ -233,7 +233,7 @@ void game_options() {
 
             for (int i = 0; i < choice_amount; i++) {
                 if (i == choice)
-                    cout << "	➤  " << choices[i] << endl;
+                    cout << "	►  " << choices[i] << endl;
                 else
                     cout << "	  " << choices[i] << endl;
             }
@@ -366,7 +366,7 @@ void game_armory() {
 
             for (int i = 0; i < choice_amount; i++) {
                 if (i == choice)
-                    cout << "	➤  " << choices[i] << endl;
+                    cout << "	►  " << choices[i] << endl;
                 else
                     cout << "	  " << choices[i] << endl;
             }

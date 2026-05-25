@@ -33,6 +33,7 @@ void game_battle() {
 	total_waves = enemy[enemyIndex].wave;
 	current_wave = 1;
 	current_enemy_health = enemy[enemyIndex].health;
+	current_enemy_damage = enemy[enemyIndex].damage;
 
 	int choice = 0;
 	int keyboard_button;
@@ -47,7 +48,7 @@ void game_battle() {
 		draw_enemy_hp_bar(current_enemy_health, enemy[enemyIndex].health);
 
 		cout << endl;
-		cout << "	                    DMG przeciwnika: " << enemy[enemyIndex].damage << endl;
+		cout << "	                    DMG przeciwnika: " << current_enemy_damage << endl;
 		cout << endl;
 
 		cout << "	" << nickname << ":\n       ";
@@ -59,7 +60,7 @@ void game_battle() {
 
 		for (int i = 0; i < choice_amount; i++) {
 			if (i == choice)
-				cout << "	➤  " << choices[i] << endl;
+				cout << "	►  " << choices[i] << endl;
 			else
 				cout << "	  " << choices[i] << endl;
 		}
@@ -157,11 +158,45 @@ void game_battle() {
 
 					clear_screen();
 					cout << endl;
-					cout << "	Twoja tura!" << endl;
+					cout << "	Twoja tura!" << endl << endl;
 					cout << "	Przeciwnik pokonany!" << endl;
 					cout << "	Otrzymujesz: $" << base_reward << " + $" << bonus_money_amount << " za czas walki!" << endl;
 					cout << "	Suma: $" << final_reward << endl;
 					current_wave++;
+					if (player_second_breath) {
+
+						int healAmount = (int)(player_maxhealth * 0.25f);
+
+						player_health += healAmount;
+
+						if (player_health > player_maxhealth)
+							player_health = player_maxhealth;
+
+						cout << "\n\tDrugie Tchnienie przywróciło: " << healAmount << " HP!\n";
+					}
+
+					if (enemy[enemyIndex].boss) {
+
+						float hpMultiplier =
+							1.0f + ((current_wave - 1) * 0.25f);
+
+						float damageMultiplier =
+							1.0f + ((current_wave - 1) * 0.15f);
+
+						current_enemy_health =
+							(int)(enemy[enemyIndex].health * hpMultiplier);
+
+						current_enemy_damage =
+							(int)(enemy[enemyIndex].damage * damageMultiplier);
+					}
+					else {
+
+						current_enemy_health =
+							enemy[enemyIndex].health;
+
+						current_enemy_damage =
+							enemy[enemyIndex].damage;
+					}
 
 					if (current_wave > total_waves) {
 						cout << "	Gratulacje! Przeszłeś poziom " << player_level << "!\n" << endl;
@@ -181,7 +216,7 @@ void game_battle() {
 				if (enemyAttack < enemy[enemyIndex].atk_chance) {
 					float reductionPercent = player_armor / (player_armor + 100.0f);
 
-					int originalDamage = enemy[enemyIndex].damage;
+					int originalDamage = current_enemy_damage;
 					bool enemyCritical = false;
 
 					int enemyCritRoll = rand() % 100;
@@ -189,7 +224,7 @@ void game_battle() {
 					if (enemyCritRoll < enemy[enemyIndex].crit_chance)
 						enemyCritical = true;
 
-					int enemyDamage = enemy[enemyIndex].damage;
+					int enemyDamage = current_enemy_damage;
 
 					if (enemyCritical)
 						enemyDamage = (int)(enemyDamage * 1.5f);
@@ -241,25 +276,19 @@ void game_battle() {
 					vampire_turns--;
 			}
 
-else if (choice == 1) {
+			else if (choice == 1) {
 
-	battle_items_menu();
-}
+				battle_items_menu();
+			}
 
 			else if (choice == 2) {
 
 				int maxEscapes = 1;
 
-				if (player_escape_master)
-					maxEscapes = 2;
 
 				if (player_escape_count >= maxEscapes) {
 					clear_screen();
 					cout << endl;
-
-					if (player_escape_master)
-						cout << "	Wykorzystałeś już obie ucieczki na tym poziomie!\n" << endl;
-					else
 						cout << "	Możesz uciec tylko raz na poziom!\n" << endl;
 
 					pause_game();
@@ -354,10 +383,10 @@ void battle_items_menu() {
 					continue;
 				}
 
-				int healAmount = (int)(20 + (player_maxhealth * 0.05f));
+				int healAmount = (int)(25 + (player_maxhealth * 0.07f));
 
-				if (healAmount > 150)
-					healAmount = 150;
+				if (healAmount > 250)
+					healAmount = 250;
 
 				player_health += healAmount;
 
@@ -399,14 +428,14 @@ void battle_items_menu() {
 				}
 
 				precision_bonus = 50;
-				precision_turns = 5;
+				precision_turns = 7;
 
 				player_precision_potion--;
 
 				clear_screen();
 
 				cout << "\n\tUżyto Eliksiru Precyzji!\n";
-				cout << "\t+50% szansy trafienia na 5 tur!\n\n";
+				cout << "\t+50% szansy trafienia na 7 tur!\n\n";
 
 				pause_game();
 				return;
@@ -435,7 +464,7 @@ void battle_items_menu() {
 					continue;
 				}
 
-				vampire_bonus = 5;
+				vampire_bonus = 10;
 				vampire_turns = 10;
 
 				player_vampire_potion--;
@@ -443,7 +472,7 @@ void battle_items_menu() {
 				clear_screen();
 
 				cout << "\n\tUżyto Koktajlu Wampira!\n";
-				cout << "\t+5% lifestealu na 10 tur!\n\n";
+				cout << "\t+10% lifestealu na 10 tur!\n\n";
 
 				pause_game();
 				return;

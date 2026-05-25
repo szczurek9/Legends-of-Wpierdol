@@ -45,7 +45,7 @@ void game_shop() {
 
 		for (int i = 0; i < shop_weapon_amount; i++) {
 			if (i == choice)
-				cout << "	➤  " << shop[i].damage << " DMG | $" << shop[i].price << " - " << shop[i].name << endl;
+				cout << "	►  " << shop[i].damage << " DMG | $" << shop[i].price << " - " << shop[i].name << endl;
 			else
 				cout << "	  " << shop[i].damage << " DMG | $" << shop[i].price << " - " << shop[i].name << endl;
 		}
@@ -89,7 +89,7 @@ void game_abilities() {
 		for (int i = 0; i < abilities_amount; i++) {
 
 			if (i == choice)
-				cout << "	➤  ";
+				cout << "	►  ";
 			else
 				cout << "	  ";
 
@@ -170,11 +170,11 @@ void game_abilities() {
 
 				break;
 			case 2:
-				if (player_crit_chance >= MAX_CRIT) {
+				if (player_crit_chance >= (MAX_CRIT * 0.5)) {
 
 					clear_screen();
 
-					cout << "\n	Osiągnięto maksymalną szansę na atak krytyczny!\n\n";
+					cout << "\n	Osiągnięto limit zakupu tej umiejętności\n\n";
 
 					pause_game();
 					continue;
@@ -186,18 +186,43 @@ void game_abilities() {
 					player_crit_chance = MAX_CRIT;
 				break;
 			case 3:
-
-				if (player_escape_master) {
+				if (player_crit_chance >= MAX_CRIT) {
 
 					clear_screen();
 
-					cout << "\n	Masz już to ulepszenie!\n\n";
+					cout << "\n	Osiągnięto maksymalną ilość szansy na trafienie krytyczne!\n\n";
+
+					pause_game();
+					continue;
+				}
+				if (player_crit_chance < (MAX_CRIT * 0.5)) {
+
+					clear_screen();
+
+					cout << "\n	Musisz kupić wykupić maksymalną ilość poprzedniej umiejętności!\n\n";
 
 					pause_game();
 					continue;
 				}
 
-				player_escape_master = true;
+				player_crit_chance += 10;
+
+				if (player_crit_chance > MAX_CRIT)
+					player_crit_chance = MAX_CRIT;
+				break;
+			case 4:
+
+				if (player_second_breath) {
+
+					clear_screen();
+
+					cout << "\n\tMasz już tę umiejętność!\n\n";
+
+					pause_game();
+					continue;
+				}
+
+				player_second_breath = true;
 
 				break;
 			}
@@ -236,7 +261,7 @@ void game_upgrades() {
 		for (int i = 0; i < upgrades_amount; i++) {
 
 			if (i == choice)
-				cout << "	➤  ";
+				cout << "	►  ";
 			else
 				cout << "	  ";
 
@@ -352,7 +377,7 @@ void game_consumables() {
 		for (int i = 0; i < consumables_amount; i++) {
 
 			if (i == choice)
-				cout << "	➤  ";
+				cout << "	►  ";
 			else
 				cout << "	  ";
 

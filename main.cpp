@@ -29,7 +29,7 @@ void game_intro() {
 
             for (int i = 0; i < choice_amount; i++) {
                 if (i == choice)
-                    cout << "	➤  " << choices[i] << endl;
+                    cout << "	►  " << choices[i] << endl;
                 else
                     cout << "	  " << choices[i] << endl;
             }
@@ -103,7 +103,7 @@ int main() {
 
         for (int i = 0; i < choice_amount; i++) {
             if (i == choice)
-                cout << "	➤  " << choices[i] << endl;
+                cout << "	►  " << choices[i] << endl;
             else
                 cout << "	  " << choices[i] << endl;
         }

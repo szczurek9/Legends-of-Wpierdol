@@ -35,7 +35,7 @@ void save_game() {
     file << player_bonus_accuracy << endl;
 
     file << player_armor << endl;
-    file << player_escape_master << endl;
+    file << player_second_breath << endl;
 
     file << player_health_potion << endl;
 
@@ -88,7 +88,7 @@ bool load_game() {
     file >> player_bonus_accuracy;
 
     file >> player_armor;
-    file >> player_escape_master;
+    file >> player_second_breath;
 
     file >> player_health_potion;
 

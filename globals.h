@@ -18,6 +18,7 @@ struct battle_enemy {
     int crit_chance;
     int player_atk_chance;
     int dodge_chance;
+    bool boss;
     int wave;
     int kill_reward;
 };
@@ -69,7 +70,7 @@ extern const int MAX_CRIT;
 
 extern int player_armor;
 
-extern bool player_escape_master;
+extern bool player_second_breath;
 extern int player_escape_count;
 
 extern int player_health_potion;
@@ -80,6 +81,8 @@ extern int player_crit_chance;
 extern int current_wave;
 extern int total_waves;
 extern int current_enemy_health;
+extern int current_enemy_damage;
+
 
 // Tablice
 extern battle_enemy enemy[];
