@@ -15,8 +15,8 @@ Turn-based fighting game running in your console!
 - More engaging gameplay!
 ### What are you waiting for? Download and play!
 System requierments:
-- Windows 10/11 or Linux (through Wine)
-- 1 MB free on your hard drive
+- Windows 10/11, Linux (through Wine), Android (Winlator 11 recommended)
+- 1 MB free on your storage device
 
 Download through Releases on GitHub.
 You can get the source code in "master" branch of this repository
