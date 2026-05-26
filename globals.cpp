@@ -134,7 +134,7 @@ skill_item abilities[] = {
 	{"Kryształ Skupienia", 420, "   15% mniejsza szansa na nietrafienie ataku (maksymalnie 30%)"},
 	{"Pierścień Zabójcy", 500, "   10% szansy na trafienie krytyczne (do 50%)"},
 	{"Płaszcz Assasyna", 1000, "   10% szansy na trafienie krytyczne (powyżej 50%)"},
-	{"Drugie Tchnienie", 3000, "   Pokonanie przeciwnika leczy cię o 25% maksymalnego ♥"}
+	{"Drugie Tchnienie", 2750, "   Pokonanie przeciwnika leczy cię o 25% maksymalnego ♥"}
 };
 
 consumable_item consumables[] = {
