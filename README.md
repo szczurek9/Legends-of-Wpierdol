@@ -3,6 +3,7 @@ Turn-based fighting game running in your console!
 ### *Fight in a way better than before!*
 - C++ Version of LoW is faster than OG batch version
 - NOW it has arrow choice selection! No more typing numbers!
+- UI has become more colorful!
 ### *Become a Legend!*
 - Encounter harder enemies as the game goes on
 - Get new crazy weapons
