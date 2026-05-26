@@ -19,7 +19,7 @@ void debug_console() {
     cout << "health <liczba> - ustaw ilosc zdrowia\n";
     cout << "level <liczba> - ustaw level\n";
     cout << "weapon <id> - ustaw broń\n";
-    cout << "back 0 - powrót do menu \n\n";
+    cout << "Aby wyjść z konsoli rekomenduje wpisanie np. money 0\n\n";
     cout << "> ";
 
     cin >> command >> value;
@@ -51,11 +51,6 @@ void debug_console() {
             cout << "\nNiepoprawne ID broni!\n";
         }
     }
-    else if (command == "back") {
-        if (value != 0) value = 0;
-        player_money += value;
-        cout << "\nPowrót!" << endl;
-    }
     else {
         cout << "\nNieznana komenda!\n";
     }
@@ -82,14 +77,43 @@ void game_menu() {
         while (true) {
             clear_screen();
             cout << endl;
-            cout << "	Nick: " << nickname << " | LVL: " << player_level << endl;
-            cout << "	HP: " << player_health << "/" << player_maxhealth << " | Pancerz: " << player_armor << "\n";
-            cout << "	Hajs: $" << player_money << endl;
-            cout << "	Broń: " << player_weapon_name << " - " << player_weapon_damage << " DMG | Szansa na Kryta: " << player_crit_chance << "%" << endl << endl;
 
+            cout << "\tNick: ";
+            print_colored(nickname, player_nickname_color);
+
+            cout << " | ";
+            ui_colored("LVL: ", player_level, COLOR_BLUE);
+
+            cout << endl;
+
+            cout << "\t";
+            ui_colored("HP: ", player_health, COLOR_GREEN);
+            ui_colored("/", player_maxhealth, COLOR_GREEN);
+
+            cout << " | ";
+            ui_colored("Pancerz: ", player_armor, COLOR_YELLOW);
+
+            cout << endl;
+
+            cout << "\t";
+            ui_colored("Hajs: $", player_money, COLOR_DARK_GREEN);
+
+            cout << endl;
+
+            cout << "\tBroń: ";
+            print_colored(player_weapon_name, COLOR_CYAN);
+
+            cout << " - ";
+            r_ui_colored(player_weapon_damage, " DMG", COLOR_RED);
+
+            cout << " | Kryt: ";
+            r_ui_colored(player_crit_chance, "%", COLOR_PURPLE);
+
+            cout << endl << endl;
             for (int i = 0; i < choice_amount; i++) {
-                if (i == choice)
-                    cout << "	►  " << choices[i] << endl;
+                if (i == choice) {
+                    cout << "	►  "; print_colored(choices[i], COLOR_BRIGHT_WHITE); cout << endl;
+                }
                 else
                     cout << "	  " << choices[i] << endl;
             }
@@ -168,8 +192,9 @@ void game_help() {
             cout << "	Pomoc\n\n	Wybierz temat:\n\n";
 
             for (int i = 0; i < choice_amount; i++) {
-                if (i == choice)
-                    cout << "	►  " << choices[i] << endl;
+                if (i == choice) {
+                    cout << "	►  "; print_colored(choices[i], COLOR_BRIGHT_WHITE); cout << endl;
+                }
                 else
                     cout << "	  " << choices[i] << endl;
             }
@@ -206,21 +231,21 @@ void game_credits() {
         cout << "	Twórcy\n\n";
         cout << "	Legends of Wpierdol\n\n";
         cout << "	Programowanie:\n	szczurek9\n\n";
-        cout << "	Game Design:\n	szczurek9\n\n";
         cout << "	Balancing:\n	na pewno nie szczurek9\n\n";
-        cout << "	Game Testing:\n	Owcacejk i Mispolarny1\n\n";
+        cout << "	Game Testing:\n	Owcacejk\n\n";
+        cout << "	Bug Fixer:\n	Mispolarny1\n\n";
         cout << "	Specjalne podziękowania:\n";
-        cout << "	Maximum412, Toster57\n";
+        cout << "	Maximum412\n";
         cout << "	Galaxy S22\n	Akali mains\n	Valve za przycisk `\n\n";
-        cout << "	Version: 1.3\n\n";
+        cout << "	Version: 1.4\n\n";
         keyboard_button = _getch();
         if (keyboard_button == 27) return;
     }
 }
 
 void game_options() {
-    const int choice_amount = 4;
-    string choices[choice_amount] = { "Pomoc", "Zapisz grę", "Twórcy", "Wyjście z gry" };
+    const int choice_amount = 5;
+    string choices[choice_amount] = { "Zapisz grę", "Zmień kolor nicku" ,"Pomoc", "Twórcy", "Wyjście z gry"};
 
     while (true) {
         int choice = 0;
@@ -232,8 +257,9 @@ void game_options() {
             cout << "	Opcje:\n\n";
 
             for (int i = 0; i < choice_amount; i++) {
-                if (i == choice)
-                    cout << "	►  " << choices[i] << endl;
+                if (i == choice) {
+                    cout << "	►  "; print_colored(choices[i], COLOR_BRIGHT_WHITE); cout << endl;
+                }
                 else
                     cout << "	  " << choices[i] << endl;
             }
@@ -256,10 +282,11 @@ void game_options() {
         }
 
         switch (choice) {
-        case 0: game_help(); break;
-        case 1: manual_save(); break;
-        case 2: game_credits(); break;
-        case 3: exit(0); break;
+        case 0: manual_save(); break;
+        case 1: game_nickname_color(); break;
+        case 2: game_help(); break;
+        case 3: game_credits(); break;
+        case 4: exit(0); break;
         }
     }
 }
@@ -279,7 +306,20 @@ void game_inventory() {
         }
 
         for (int i = 0; i < inventory_count; i++) {
-            cout << "	" << i + 1 << ". " << inventory[i].name << " | DMG: " << inventory[i].damage << " | Sprzedaż: $" << (inventory[i].price * 40 / 100) << endl;
+
+            cout << "\t" << i + 1 << ". ";
+
+            print_colored(inventory[i].name, COLOR_CYAN);
+
+            cout << " | ";
+
+            number_colored(inventory[i].damage, COLOR_RED);
+
+            cout << " DMG | ";
+
+            r_ui_colored(inventory[i].price * 40 / 100, "$", COLOR_DARK_GREEN);
+
+            cout << endl;
         }
 
         cout << "\n	0. Powrót";
@@ -298,10 +338,19 @@ void game_inventory() {
 
         clear_screen();
 
-        cout << "\n	" << inventory[choice].name << endl;
-        cout << "	1. Załóż\n";
-        cout << "	2. Sprzedaj\n";
-        cout << "	0. Powrót\n\n";
+        cout << "\n\t";
+        print_colored(inventory[choice].name, COLOR_CYAN);
+        cout << endl;
+
+        cout << "\t1. ";
+        print_colored("Załóż", COLOR_GREEN);
+        cout << endl;
+
+        cout << "\t2. ";
+        print_colored("Sprzedaj", COLOR_RED);
+        cout << endl;
+
+        cout << "\t0. Powrót\n\n";
 
         int action;
         cin >> action;
@@ -335,7 +384,9 @@ void game_inventory() {
 
             inventory_count--;
 
-            cout << "\n	Sprzedano broń za $" << money << "!\n";
+            cout << "\n\tSprzedano za ";
+            r_ui_colored(money, "$", COLOR_DARK_GREEN);
+            cout << "!\n";
         }
 
         pause_game();
@@ -365,8 +416,9 @@ void game_armory() {
             cout << "	Zbrojownia\n\n";
 
             for (int i = 0; i < choice_amount; i++) {
-                if (i == choice)
-                    cout << "	►  " << choices[i] << endl;
+                if (i == choice) {
+                    cout << "	►  "; print_colored(choices[i], COLOR_BRIGHT_WHITE); cout << endl;
+                }
                 else
                     cout << "	  " << choices[i] << endl;
             }
@@ -416,6 +468,123 @@ void game_armory() {
         case 3:
             game_consumables();
             break;
+        }
+    }
+}
+
+void game_nickname_color() {
+
+    const int color_amount = 15;
+
+    string color_names[color_amount] = {
+        "Biały",
+        "Jasny Biały",
+
+        "Niebieski",
+        "Ciemny Niebieski",
+
+        "Zielony",
+        "Ciemny Zielony",
+
+        "Cyan",
+        "Ciemny Cyan",
+
+        "Czerwony",
+        "Ciemny Czerwony",
+
+        "Fioletowy",
+        "Ciemny Fioletowy",
+
+        "Żółty",
+        "Ciemny Żółty",
+
+        "Szary"
+    };
+
+    int colors[color_amount] = {
+        COLOR_WHITE,
+        COLOR_BRIGHT_WHITE,
+
+        COLOR_BLUE,
+        COLOR_DARK_BLUE,
+
+        COLOR_GREEN,
+        COLOR_DARK_GREEN,
+
+        COLOR_CYAN,
+        COLOR_DARK_CYAN,
+
+        COLOR_RED,
+        COLOR_DARK_RED,
+
+        COLOR_PURPLE,
+        COLOR_DARK_PURPLE,
+
+        COLOR_YELLOW,
+        COLOR_DARK_YELLOW,
+
+        COLOR_GRAY
+    };
+
+    int choice = 0;
+
+    while (true) {
+
+        clear_screen();
+
+        cout << "ESC - Powrót\n\n";
+        cout << "\tKolor Nicku\n\n";
+
+        for (int i = 0; i < color_amount; i++) {
+
+            if (i == choice)
+                cout << "\t► ";
+            else
+                cout << "\t  ";
+
+            set_color(colors[i]);
+            cout << color_names[i];
+            reset_color();
+
+            cout << endl;
+        }
+
+        int key = _getch();
+
+        if (key == 224) {
+
+            key = _getch();
+
+            if (key == 72) {
+
+                choice--;
+
+                if (choice < 0)
+                    choice = color_amount - 1;
+            }
+            else if (key == 80) {
+
+                choice++;
+
+                if (choice >= color_amount)
+                    choice = 0;
+            }
+        }
+        else if (key == 13) {
+
+            player_nickname_color = colors[choice];
+
+            clear_screen();
+
+            cout << "\n\tZmieniono kolor nicku!\n\n";
+
+            pause_game();
+
+            return;
+        }
+        else if (key == 27) {
+
+            return;
         }
     }
 }

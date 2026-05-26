@@ -8,6 +8,47 @@
 
 using namespace std;
 
+static void set_color(int color) {
+
+    SetConsoleTextAttribute(
+        GetStdHandle(STD_OUTPUT_HANDLE),
+        color
+    );
+}
+
+static void reset_color() {
+
+    set_color(COLOR_WHITE);
+}
+
+static void print_colored(string text, int color) {
+
+    set_color(color);
+    cout << text;
+    reset_color();
+}
+
+static void number_colored(int text, int color) {
+
+    set_color(color);
+    cout << text;
+    reset_color();
+}
+
+static void ui_colored(string text, int number, int color) {
+
+    set_color(color);
+    cout << text << number;
+    reset_color();
+}
+
+static void r_ui_colored(int number, string text, int color) {
+
+    set_color(color);
+    cout << number << text;
+    reset_color();
+}
+
 static void clear_screen() {
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -57,8 +98,14 @@ static void draw_enemy_hp_bar(int current, int maximum, int width = 20) {
     int filled = (int)(ratio * width);
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    cout << " ♥ ";
-    cout << current << "/" << maximum;
+    print_colored(" ♥ ", COLOR_RED);
+
+    number_colored(current, COLOR_RED);
+
+    cout << "/";
+
+    number_colored(maximum, COLOR_RED);
+
     cout << " [";
 
     for (int i = 0; i < width; i++) {
@@ -93,7 +140,7 @@ static void draw_player_hp_bar(int current, int maximum, int width = 20) {
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    cout << " ♥ [";
+    print_colored(" ♥ [", COLOR_GREEN);
 
     for (int i = 0; i < width; i++) {
 
@@ -117,6 +164,11 @@ static void draw_player_hp_bar(int current, int maximum, int width = 20) {
 
     SetConsoleTextAttribute(hConsole, 7);
 
-    cout << "] ";
-    cout << current << "/" << maximum;
+    print_colored("] ", COLOR_GREEN);
+    number_colored(current, COLOR_GREEN);
+
+    cout << "/";
+
+    number_colored(maximum, COLOR_GREEN);
 }
+

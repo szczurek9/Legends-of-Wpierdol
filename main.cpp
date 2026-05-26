@@ -28,8 +28,9 @@ void game_intro() {
             cout << endl << "	Wykryto zapis gry!\n\n";
 
             for (int i = 0; i < choice_amount; i++) {
-                if (i == choice)
-                    cout << "	►  " << choices[i] << endl;
+                if (i == choice) {
+                    cout << "	►  "; print_colored(choices[i], COLOR_BRIGHT_WHITE); cout << endl;
+                }
                 else
                     cout << "	  " << choices[i] << endl;
             }
@@ -102,8 +103,9 @@ int main() {
         cout << endl << "	Legends of Wpierdol\n\n";
 
         for (int i = 0; i < choice_amount; i++) {
-            if (i == choice)
-                cout << "	►  " << choices[i] << endl;
+            if (i == choice) {
+                cout << "	►  "; print_colored(choices[i], COLOR_BRIGHT_WHITE); cout << endl;
+            }
             else
                 cout << "	  " << choices[i] << endl;
         }

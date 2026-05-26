@@ -56,25 +56,54 @@ void game_battle() {
 
 		clear_screen();
 		cout << endl;
-		cout << "	Lvl: " << player_level << " | Runda: " << current_wave << " z " << total_waves << "\n\n";
+		print_colored("\tLvl", COLOR_BRIGHT_WHITE);
+		cout << ": " << player_level << " | ";
 
-		cout << "	                    " << enemy[enemyIndex].name << "\n	                    ";
+		print_colored("Runda", COLOR_BRIGHT_WHITE);
+		cout << ": " << current_wave << "/" << total_waves << "\n\n";
+
+		cout << "\t                    ";
+		print_colored(enemy[enemyIndex].name, COLOR_RED);
+
+		cout << "\n\t                    ";
 		draw_enemy_hp_bar(current_enemy_health, current_enemy_max_health);
 
-		cout << endl;
-		cout << "	                    DMG przeciwnika: " << current_enemy_damage << endl;
-		cout << endl;
+		cout << "\n\n\t                    ";
 
-		cout << "	" << nickname << ":\n       ";
+		print_colored("DMG przeciwnika", COLOR_RED);
+		cout << ": " << current_enemy_damage << endl << endl;
+
+		cout << "\t";
+		print_colored(nickname, player_nickname_color);
+		cout << ":\n       ";
+
 		draw_player_hp_bar(player_health, player_maxhealth);
 
+		cout << "\n\n\t";
+
+		print_colored("Broń", COLOR_BRIGHT_WHITE);
+		cout << ": ";
+
+		print_colored(player_weapon_name, COLOR_CYAN);
+
+		cout << " - ";
+
+		number_colored(player_weapon_damage, COLOR_RED);
+
+		print_colored(" DMG", COLOR_RED);
+
 		cout << endl;
-		cout << "	Broń: " << player_weapon_name << " - " << player_weapon_damage << " DMG" << endl;
-		cout << "	Mikstury Zdrowia: " << player_health_potion << "\n\n";
+
+		cout << "\t";
+
+		print_colored("Mikstury Zdrowia", COLOR_GREEN);
+
+		cout << ": " << player_health_potion << "\n\n";
 
 		for (int i = 0; i < choice_amount; i++) {
-			if (i == choice)
-				cout << "	►  " << choices[i] << endl;
+			if (i == choice) {
+				cout << "	►  "; print_colored(choices[i], COLOR_BRIGHT_WHITE); cout << endl;
+			}
 			else
 				cout << "	  " << choices[i] << endl;
 		}
@@ -106,9 +135,16 @@ void game_battle() {
 				if (final_dodge < 0) final_dodge = 0;
 
 				if (miss < final_dodge) {
+					// ATAK NIETRAFIONY
+
 					clear_screen();
-					cout << endl << "	Twoja tura!\n" << endl;
-					cout << "	Przeciwnik uniknął twojego ataku!\n" << endl;
+					cout << "\n\t";
+					print_colored("Twoja tura!", COLOR_BRIGHT_WHITE);
+					cout << "\n";
+					cout << "\n\t";
+					print_colored("Przeciwnik uniknął twojego ataku!", COLOR_RED);
+					cout << endl << endl;
+
 					pause_game();
 				}
 				else {
@@ -140,15 +176,38 @@ void game_battle() {
 					if (player_health > player_maxhealth)
 						player_health = player_maxhealth;
 
+					// ATAK TRAFIONY
+
 					clear_screen();
-					cout << endl << "	Twoja tura!\n" << endl;
-					if (critical)
-						cout << "\tTRAFIENIE KRYTYCZNE!\n";
-					cout << "	Zadałeś " << dealt_damage << " obrażeń!\n";
-					cout << "	Przeciwnik ma teraz " << current_enemy_health << " HP!\n";
-					if (heal > 0)
-						cout << "	Odnowiono " << heal << " HP dzięki Wampirycznemu Ostrzu!\n";
+					cout << "\n\t";
+					print_colored("Twoja tura!", COLOR_BRIGHT_WHITE);
+					cout << "\n";
+					cout << "\n\t";
+
+					if (critical) {
+						print_colored("TRAFIENIE KRYTYCZNE!", COLOR_PURPLE);
+
+						cout << "\n\t";
+					}
+					print_colored("Zadałeś ", COLOR_GREEN);
+					number_colored(dealt_damage, COLOR_RED);
+					print_colored(" obrażeń!", COLOR_GREEN);
+
 					cout << endl;
+					cout << "\n\t";
+					print_colored("Przeciwnik ma teraz ", COLOR_BRIGHT_WHITE);
+					number_colored(current_enemy_health, COLOR_RED);
+					print_colored(" HP!", COLOR_BRIGHT_WHITE);
+
+					if (heal > 0) {
+						cout << endl;
+						cout << "\n\t";
+						print_colored("Odnowiono ", COLOR_GREEN);
+						number_colored(heal, COLOR_GREEN);
+						print_colored(" HP dzięki Wampirycznemu Ostrzu!", COLOR_GREEN);
+					}
+
+					cout << endl << endl;
 					pause_game();
 				}
 
@@ -171,12 +230,27 @@ void game_battle() {
 					int bonus_money_amount = final_reward - base_reward;
 
 					clear_screen();
+
+					cout << "\n\t";
+					print_colored("Przeciwnik pokonany!", COLOR_GREEN);
+					cout << "\n";
+					cout << "\n\t";
+					print_colored("Otrzymujesz: $", COLOR_DARK_GREEN);
+					number_colored(base_reward, COLOR_DARK_GREEN);
+
+					print_colored(" + $", COLOR_YELLOW);
+					number_colored(bonus_money_amount, COLOR_YELLOW);
+
+					print_colored(" za czas walki!", COLOR_BRIGHT_WHITE);
+
+					cout << "\n\t";
+
+					print_colored("Suma: $", COLOR_GREEN);
+					number_colored(final_reward, COLOR_GREEN);
+
 					cout << endl;
-					cout << "	Twoja tura!" << endl << endl;
-					cout << "	Przeciwnik pokonany!" << endl;
-					cout << "	Otrzymujesz: $" << base_reward << " + $" << bonus_money_amount << " za czas walki!" << endl;
-					cout << "	Suma: $" << final_reward << endl;
 					current_wave++;
+					battle_start = clock();
 					if (player_second_breath) {
 
 						int healAmount = (int)(player_maxhealth * 0.25f);
@@ -186,30 +260,8 @@ void game_battle() {
 						if (player_health > player_maxhealth)
 							player_health = player_maxhealth;
 
-						cout << "\n\tDrugie Tchnienie przywróciło: " << healAmount << " HP!\n";
-					}
-
-					if (enemy[enemyIndex].boss) {
-
-						float hpMultiplier =
-							1.0f + ((current_wave - 1) * 0.25f);
-
-						float damageMultiplier =
-							1.0f + ((current_wave - 1) * 0.15f);
-
-						current_enemy_health =
-							(int)(enemy[enemyIndex].health * hpMultiplier);
-
-						current_enemy_damage =
-							(int)(enemy[enemyIndex].damage * damageMultiplier);
-					}
-					else {
-
-						current_enemy_health =
-							enemy[enemyIndex].health;
-
-						current_enemy_damage =
-							enemy[enemyIndex].damage;
+						cout << "\n\t";
+						ui_colored("Drugie Tchnienie przywróciło: ", healAmount, COLOR_GREEN); print_colored(" HP!", COLOR_GREEN); cout << "\n\n";
 					}
 
 					if (current_wave > total_waves) {
@@ -220,8 +272,19 @@ void game_battle() {
 						pause_game();
 						return;
 					}
+					if (enemy[enemyIndex].boss) {
+						float hpMultiplier = 1.0f + ((current_wave - 1) * 0.25f);
+						float damageMultiplier = 1.0f + ((current_wave - 1) * 0.15f);
 
-					current_enemy_health = current_enemy_max_health;
+						current_enemy_max_health = (int)(enemy[enemyIndex].health * hpMultiplier);
+						current_enemy_health = current_enemy_max_health;
+						current_enemy_damage = (int)(enemy[enemyIndex].damage * damageMultiplier);
+					}
+					else {
+						current_enemy_max_health = enemy[enemyIndex].health;
+						current_enemy_health = current_enemy_max_health;
+						current_enemy_damage = enemy[enemyIndex].damage;
+					}
 					pause_game();
 					continue;
 				}
@@ -251,28 +314,43 @@ void game_battle() {
 					int amountOfDamageReducted = originalDamage - finalDamage;
 
 					player_health -= finalDamage;
+					// ATAK PRZECIWNIKA TRAFIONY
 
 					clear_screen();
-					cout << endl << "	Tura przeciwnika!\n" << endl;
+					cout << "\n\t";
+					print_colored("Tura Przeciwnika!", COLOR_BRIGHT_WHITE);
+					cout << "\n";
+					cout << "\n\t";
 
-					if (enemyCritical)
-						cout << "\tPRZECIWNIK TRAFIŁ KRYTYCZNIE!\n";
+					if (enemyCritical) {
+						print_colored("PRZECIWNIK TRAFIŁ KRYTYCZNIE!", COLOR_PURPLE);
 
-					if (amountOfDamageReducted > 0) {
-						cout << "	Obrażenia przeciwnika zredukowane o: "
-							<< amountOfDamageReducted << "!\n";
+						cout << "\n\t";
 					}
+					if (amountOfDamageReducted > 0) {
+						ui_colored("Obrażenia przeciwnika zredukowane o: ", amountOfDamageReducted, COLOR_YELLOW);
+						cout << "\n\t";
+					}
+					print_colored("Przeciwnik zadał Ci ", COLOR_RED);
+					number_colored((int)finalDamage, COLOR_RED);
+					print_colored(" obrażeń!", COLOR_RED);
 
-					cout << "	Przeciwnik zadał Ci "
-						<< finalDamage
-						<< " obrażeń!\n" << endl;
-
+					cout << endl << endl;
 					pause_game();
 				}
 				else {
+					// NIETRAFIONY
 					clear_screen();
-					cout << endl << "	Tura przeciwnika!\n" << endl;
-					cout << "	Przeciwnik nie trafił! Nie otrzymujesz żadnych obrażeń!\n" << endl;
+					cout << "\n\t";
+					print_colored("Tura Przeciwnika!", COLOR_BRIGHT_WHITE);
+					cout << "\n";
+					cout << "\n\t";
+
+					print_colored("Przeciwnik nie trafił!", COLOR_GREEN);
+					cout << "\n\t";
+					print_colored("Nie otrzymujesz obrażeń!", COLOR_GREEN);
+
+					cout << endl << endl;
 					pause_game();
 				}
 
@@ -347,18 +425,39 @@ void battle_items_menu() {
 
 		cout << "\n\tPrzedmioty\n\n";
 
-		cout << "\tMikstura Zdrowia: x" << player_health_potion << endl;
-		cout << "\tEliksir Precyzji: x" << player_precision_potion << endl;
-		cout << "\tKoktajl Wampira: x" << player_vampire_potion << endl;
+		clear_screen();
 
-		cout << endl;
+		print_colored("\n\tPrzedmioty\n\n", COLOR_BRIGHT_WHITE);
+
+		cout << "\t";
+		print_colored("Mikstura Zdrowia: ", COLOR_GREEN);
+		if (player_health_potion > 0)
+			number_colored(player_health_potion, COLOR_GREEN);
+		else
+			number_colored(player_health_potion, COLOR_RED);
+
+		cout << "\n\t";
+		print_colored("Eliksir Precyzji: ", COLOR_CYAN);
+		if (player_precision_potion > 0)
+			number_colored(player_precision_potion, COLOR_CYAN);
+		else
+			number_colored(player_precision_potion, COLOR_RED);
+
+		cout << "\n\t";
+		print_colored("Koktajl Wampira: ", COLOR_PURPLE);
+		if (player_vampire_potion > 0)
+			number_colored(player_vampire_potion, COLOR_PURPLE);
+		else
+			number_colored(player_vampire_potion, COLOR_RED);
+
+		cout << "\n\n";
 
 		for (int i = 0; i < item_amount; i++) {
-
-			if (i == choice)
-				cout << "\t➤   " << items[i] << endl;
+			if (i == choice) {
+				cout << "	►  "; print_colored(items[i], COLOR_BRIGHT_WHITE); cout << endl;
+			}
 			else
-				cout << "\t   " << items[i] << endl;
+				cout << "	  " << items[i] << endl;
 		}
 
 		keyboard_button = _getch();
@@ -411,8 +510,14 @@ void battle_items_menu() {
 
 				clear_screen();
 
-				cout << "\n\tUżyto Mikstury Zdrowia!\n";
-				cout << "\tOdzyskano " << healAmount << " HP!\n\n";
+				cout << "\n\t";
+				print_colored("Użyto Mikstury Zdrowia!", COLOR_GREEN);
+				cout << endl;
+				cout << "\t";
+				print_colored("Odzyskano ", COLOR_GREEN);
+				number_colored(healAmount, COLOR_GREEN);
+				print_colored(" HP!", COLOR_GREEN); 
+				cout << "\n\n";
 
 				pause_game();
 				return;
@@ -448,9 +553,11 @@ void battle_items_menu() {
 
 				clear_screen();
 
-				cout << "\n\tUżyto Eliksiru Precyzji!\n";
-				cout << "\t+50% szansy trafienia na 7 tur!\n\n";
-
+				cout << "\n\t";
+				print_colored("Użyto Eliksiru Precyzji!", COLOR_CYAN);
+				cout << "\n\t";
+				print_colored("+50% szansy trafienia na 7 tur!", COLOR_CYAN);
+				cout << "\n\n";
 				pause_game();
 				return;
 			}
@@ -485,9 +592,11 @@ void battle_items_menu() {
 
 				clear_screen();
 
-				cout << "\n\tUżyto Koktajlu Wampira!\n";
-				cout << "\t+10% lifestealu na 10 tur!\n\n";
-
+				cout << "\n\t";
+				print_colored("Użyto Koktajlu Wampira!", COLOR_PURPLE);
+				cout << "\n\t";
+				print_colored("+10% lifestealu na 10 tur!", COLOR_PURPLE);
+				cout << "\n\n";
 				pause_game();
 				return;
 			}

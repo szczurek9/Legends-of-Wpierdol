@@ -47,6 +47,30 @@ struct consumable_item {
     string description;
 };
 
+
+enum ConsoleColor {
+
+    COLOR_BLACK = 0,
+
+    COLOR_DARK_BLUE = 1,
+    COLOR_DARK_GREEN = 2,
+    COLOR_DARK_CYAN = 3,
+    COLOR_DARK_RED = 4,
+    COLOR_DARK_PURPLE = 5,
+    COLOR_DARK_YELLOW = 6,
+    COLOR_WHITE = 7,
+    COLOR_GRAY = 8,
+
+    COLOR_BLUE = 9,
+    COLOR_GREEN = 10,
+    COLOR_CYAN = 11,
+    COLOR_RED = 12,
+    COLOR_PURPLE = 13,
+    COLOR_YELLOW = 14,
+    COLOR_BRIGHT_WHITE = 15
+};
+
+
 // Zmienne gracza
 extern string nickname;
 extern int player_level;
@@ -58,6 +82,8 @@ extern int player_weapon_damage;
 extern bool player_used_escape;
 
 extern int player_weapon_price;
+
+extern int player_nickname_color;
 
 // Wzmocnienia
 extern int player_lifesteal;

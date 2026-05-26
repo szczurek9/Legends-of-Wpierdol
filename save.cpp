@@ -20,6 +20,7 @@ void save_game() {
         return;
 
     file << nickname << endl;
+    file << player_nickname_color << endl;
 
     file << player_level << endl;
     file << player_money << endl;
@@ -71,6 +72,9 @@ bool load_game() {
 
     getline(file, nickname);
 
+    file >> player_nickname_color;
+    file.ignore();
+
     file >> player_level;
     file >> player_money;
 
@@ -98,10 +102,10 @@ bool load_game() {
     file >> precision_bonus;
     file >> precision_turns;
 
-    file >> player_crit_chance;
-
     file >> vampire_bonus;
     file >> vampire_turns;
+
+    file >> player_crit_chance;  
 
     file >> inventory_count;
 

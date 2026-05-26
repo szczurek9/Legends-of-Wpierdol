@@ -5,13 +5,24 @@
 using namespace std;
 
 void shop_buy_weapon(int id) {
+
 	clear_screen();
+
 	cout << endl;
-	cout << "	Wybrałeś: " << shop[id].name << endl;
-	cout << "	Cena: $" << shop[id].price << endl;
+	cout << "\tWybrałeś: ";
+	print_colored(shop[id].name, COLOR_CYAN);
+
+	cout << endl;
+
+	cout << "\tCena: ";
+	r_ui_colored(shop[id].price, "$", COLOR_DARK_GREEN);
+
+	cout << endl;
 
 	if (player_money >= shop[id].price) {
+
 		player_money -= shop[id].price;
+
 		if (player_weapon_name != "nic") {
 
 			inventory[inventory_count].name = player_weapon_name;
@@ -20,14 +31,23 @@ void shop_buy_weapon(int id) {
 
 			inventory_count++;
 		}
+
 		player_weapon_name = shop[id].name;
 		player_weapon_damage = shop[id].damage;
 		player_weapon_price = shop[id].price;
-		cout << endl << "	Kupiono!" << endl << endl;
+
+		cout << endl << "\t";
+		print_colored("Kupiono!", COLOR_GREEN);
+		cout << endl << endl;
+
 		pause_game();
 	}
 	else {
-		cout << endl << "Za mało hajsu!" << endl << endl;
+
+		cout << endl << "\t";
+		print_colored("Za mało hajsu!", COLOR_RED);
+		cout << endl << endl;
+
 		pause_game();
 	}
 }
@@ -40,14 +60,37 @@ void game_shop() {
 		clear_screen();
 		cout << "ESC - Powrót\n\n";
 		cout << "	Sklep:\n\n";
-		cout << "	Hajs: $" << player_money << endl;
-		cout << "	Aktualna Broń: " << player_weapon_name << " - " << player_weapon_damage << " DMG" << endl << endl;
+		cout << "\t";
+		ui_colored("Hajs: $", player_money, COLOR_DARK_GREEN);
+		cout << endl;
+
+		cout << "\tAktualna Broń: ";
+		print_colored(player_weapon_name, COLOR_CYAN);
+
+		cout << " - ";
+		r_ui_colored(player_weapon_damage, " DMG", COLOR_RED);
+
+		cout << endl << endl;
 
 		for (int i = 0; i < shop_weapon_amount; i++) {
-			if (i == choice)
-				cout << "	►  " << shop[i].damage << " DMG | $" << shop[i].price << " - " << shop[i].name << endl;
-			else
-				cout << "	  " << shop[i].damage << " DMG | $" << shop[i].price << " - " << shop[i].name << endl;
+
+			if (i == choice) {
+				cout << "\t►  ";
+			}
+			else {
+				cout << "\t  ";
+			}
+
+			number_colored(shop[i].damage, COLOR_RED);
+			cout << " DMG | ";
+
+			r_ui_colored(shop[i].price, "$", COLOR_DARK_GREEN);
+
+			cout << " - ";
+
+			print_colored(shop[i].name, COLOR_CYAN);
+
+			cout << endl;
 		}
 
 		keyboard_button = _getch();
@@ -84,7 +127,9 @@ void game_abilities() {
 		cout << "ESC - Powrót\n\n";
 		cout << "	Umiejętności\n\n";
 
-		cout << "	Hajs: $" << player_money << endl << endl;
+		cout << "\t";
+		ui_colored("Hajs: $", player_money, COLOR_DARK_GREEN);
+		cout << endl << endl;
 
 		for (int i = 0; i < abilities_amount; i++) {
 
@@ -93,8 +138,11 @@ void game_abilities() {
 			else
 				cout << "	  ";
 
-			cout << abilities[i].name << " | $" << abilities[i].price << endl;
-			cout << "	   " << abilities[i].description << endl;
+			print_colored(abilities[i].name, COLOR_PURPLE);
+			cout << " | ";
+			r_ui_colored(abilities[i].price, "$", COLOR_DARK_GREEN);
+			cout << endl;
+			cout << "\t   " << abilities[i].description << endl;
 		}
 
 		keyboard_button = _getch();
@@ -254,9 +302,17 @@ void game_upgrades() {
 		cout << "ESC - Powrót\n\n";
 		cout << "	Wzmocnienia\n\n";
 
-		cout << "	Hajs: $" << player_money << "\n";
-		cout << "	HP: " << player_health << "/" << player_maxhealth << "\n";
-		cout << "	Pancerz: " << player_armor << "\n\n";
+		cout << "\t";
+		ui_colored("Hajs: $", player_money, COLOR_DARK_GREEN);
+
+		cout << "\n\t";
+		ui_colored("HP: ", player_health, COLOR_GREEN);
+		ui_colored("/", player_maxhealth, COLOR_GREEN);
+
+		cout << "\n\t";
+		ui_colored("Pancerz: ", player_armor, COLOR_YELLOW);
+
+		cout << "\n\n";
 
 		for (int i = 0; i < upgrades_amount; i++) {
 
@@ -265,8 +321,11 @@ void game_upgrades() {
 			else
 				cout << "	  ";
 
-			cout << upgrades[i].name << " | $" << upgrades[i].price << endl;
-			cout << "	   " << upgrades[i].description << endl;
+			print_colored(upgrades[i].name, COLOR_YELLOW);
+			cout << " | ";
+			r_ui_colored(upgrades[i].price, "$", COLOR_DARK_GREEN);
+			cout << endl;
+			cout << "\t   " << upgrades[i].description << endl;
 		}
 
 		keyboard_button = _getch();
@@ -367,11 +426,27 @@ void game_consumables() {
 		cout << "ESC - Powrót\n\n";
 		cout << "	Alchemik\n\n";
 
-		cout << "	Hajs: $" << player_money << endl;
+		cout << "\t";
+		ui_colored("Hajs: $", player_money, COLOR_DARK_GREEN);
+		cout << endl;
 		cout << "	Posiadane mikstury:\n";
-		if (player_health_potion > 0) cout << "\t\tMikstura Zdrowia x" << player_health_potion << "\n";
-		if (player_precision_potion > 0) cout << "\t\tEliksir Precyzji x" << player_precision_potion << "\n";
-		if (player_vampire_potion > 0) cout << "\t\tKoktajl Wampira x" << player_vampire_potion << "\n";
+		if (player_health_potion > 0) {
+			cout << "\t\t";
+			print_colored("Mikstura Zdrowia", COLOR_GREEN);
+			cout << " x" << player_health_potion << "\n";
+		}
+
+		if (player_precision_potion > 0) {
+			cout << "\t\t";
+			print_colored("Eliksir Precyzji", COLOR_CYAN);
+			cout << " x" << player_precision_potion << "\n";
+		}
+
+		if (player_vampire_potion > 0) {
+			cout << "\t\t";
+			print_colored("Koktajl Wampira", COLOR_PURPLE);
+			cout << " x" << player_vampire_potion << "\n";
+		}
 		if (player_health_potion <= 0  && player_precision_potion <= 0 && player_vampire_potion <= 0) cout << "\t\tBrak\n";
 		cout << "\n";
 		for (int i = 0; i < consumables_amount; i++) {
@@ -381,8 +456,11 @@ void game_consumables() {
 			else
 				cout << "	  ";
 
-			cout << consumables[i].name << " | $" << consumables[i].price << endl;
-			cout << "	   " << consumables[i].description << endl;
+			print_colored(consumables[i].name, COLOR_CYAN);
+			cout << " | ";
+			r_ui_colored(consumables[i].price, "$", COLOR_DARK_GREEN);
+			cout << endl;
+			cout << "\t   " << consumables[i].description << endl;
 		}
 
 		keyboard_button = _getch();

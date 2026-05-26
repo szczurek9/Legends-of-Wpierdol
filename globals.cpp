@@ -14,6 +14,8 @@ int player_lifesteal = 0;
 int player_bonus_health = 0;
 int player_bonus_accuracy = 0;
 
+int player_nickname_color = COLOR_WHITE;
+
 int player_armor = 0;
 
 const int MAX_LIFESTEAL = 20;
@@ -93,7 +95,7 @@ battle_enemy enemy[] = {
 	{    37, "Walter White",                  14000, 500,  75,  40,   26,   74,  false,  3,   340  },
 	{    38, "Owcacejk",                      15000, 600,  76,  40,   24,   76,  false,  3,   367  },
 	{    39, "Pan Ryszard",                   16000, 700,  80,  40,   22,   78,  false,  3,   400  },
-	{    40, "Legenda Wpierdolu",             20000, 750,  90,  40,   20,   80,   true,  5,   500  }
+	{    40, "Legenda Wpierdolu",             15000, 650,  90,  40,   20,   80,   true,  5,   500  }
 };
 
 shop_weapons shop[] = {
@@ -138,7 +140,7 @@ skill_item abilities[] = {
 consumable_item consumables[] = {
 
 	{"Mikstura Zdrowia", 60, "   Leczy 25 + 7% maksymalnego ♥ podczas walki (maksymalnie leczy ♥ 250) "},
-	{"Eliksir Precyzji", 350, "   Zwiększa twoją szanse na atak o 50% na 7 tur (nie stackuje się)"},
+	{"Eliksir Precyzji", 280, "   Zwiększa twoją szanse na atak o 50% na 7 tur (nie stackuje się)"},
 	{"Koktajl Wampira", 200, "   Leczysz się za 10% zadanych obrażeń na 10 tur (nie stackuje się) "}
 };
 
