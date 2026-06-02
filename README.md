@@ -1,3 +1,4 @@
+<img width="256" height="256" alt="ikonaa" src="https://github.com/user-attachments/assets/a13ac5bc-f0bc-4ed8-9988-061e8a496e81" />
 # Legends of Wpierdol
 Turn-based fighting game running in your console!
 ### *Fight in a way better than before!*
