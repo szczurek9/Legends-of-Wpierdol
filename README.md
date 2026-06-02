@@ -3,7 +3,7 @@
 </p>
 
 # Legends of Wpierdol
-Turn-based fighting game running in your console!
+Turn-based fighting game running in your console! (made by MSLG Studios)
 ### *Fight in a way better than before!*
 - C++ Version of LoW is faster than OG batch version
 - NOW it has arrow choice selection! No more typing numbers!
