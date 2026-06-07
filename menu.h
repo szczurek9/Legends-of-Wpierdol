@@ -7,4 +7,5 @@ void game_help();
 void game_help_battle();
 void game_inventory();
 void game_help_shop();
+void game_armory();
 void game_nickname_color();

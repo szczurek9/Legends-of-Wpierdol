@@ -21,6 +21,9 @@ struct battle_enemy {
     bool boss;
     int wave;
     int kill_reward;
+    int armor;          // pancerz przeciwnika (redukcja fizycznych obrażeń gracza)
+    int magic_resist;   // odporność magiczna przeciwnika
+    int armor_pen;      // przebicie pancerza gracza przez przeciwnika
 };
 
 struct InventoryWeapon {
@@ -47,6 +50,17 @@ struct consumable_item {
     string description;
 };
 
+// Przedmiot magiczny (max 6 slotów)
+struct magic_item_def {
+    string name;
+    int price;
+    int bonus_mana;
+    int bonus_spell_power;
+    int magic_resist_pen;  // przebicie odporności magicznej przeciwnika
+    int bonus_magic_resist; // odporność magiczna gracza
+    int base_mana_regen_bonus; // bonus do bazowej regeneracji many (%)
+    string description;
+};
 
 enum ConsoleColor {
 
@@ -70,6 +84,14 @@ enum ConsoleColor {
     COLOR_BRIGHT_WHITE = 15
 };
 
+// Klasy postaci
+enum PlayerClass {
+    CLASS_NONE = 0,
+    CLASS_ASSASSIN = 1,  // Zabójca
+    CLASS_MAGE = 2,      // Mag
+    CLASS_TANK = 3,      // Tank
+    CLASS_WARRIOR = 4    // Wojownik
+};
 
 // Zmienne gracza
 extern string nickname;
@@ -95,6 +117,9 @@ extern const int MAX_ACCURACY;
 extern const int MAX_CRIT;
 
 extern int player_armor;
+extern int player_magic_resist;         // odporność magiczna gracza
+extern int player_armor_pen;            // przebicie pancerza przeciwnika przez gracza
+// enemy_armor_pen jest teraz polem w strukturze battle_enemy (per wróg)
 
 extern bool player_second_breath;
 extern int player_escape_count;
@@ -102,6 +127,26 @@ extern int player_escape_count;
 extern int player_health_potion;
 
 extern int player_crit_chance;
+
+// Mana i czary
+extern int player_mana;
+extern int player_maxmana;
+extern int player_spell_power;          // siła zaklęć
+extern int player_magic_resist_pen;     // przebicie odporności magicznej przeciwnika
+
+// Stun
+extern int enemy_stun_turns;           // liczba tur ogłuszenia przeciwnika
+
+// Klasa postaci
+extern PlayerClass player_class;
+
+// Bonus AD z klasy (osobny od broni, nie nadpisywany przez zakup)
+extern int player_class_bonus_ad;
+
+// Sloty na przedmioty magiczne (max 6)
+extern const int MAX_MAGIC_ITEMS;
+extern int magic_item_slots[6];        // indeksy założonych itemów (-1 = pusty slot)
+extern int magic_item_count;           // ile przedmiotów założonych
 
 // Fale
 extern int current_wave;
@@ -119,10 +164,12 @@ extern const int shop_weapon_amount;
 extern upgrade_item upgrades[];
 extern skill_item abilities[];
 extern consumable_item consumables[];
+extern magic_item_def magic_items[];
 
 extern const int upgrades_amount;
 extern const int abilities_amount;
 extern const int consumables_amount;
+extern const int magic_items_amount;
 
 const int max_inventory = 50;
 
@@ -138,4 +185,3 @@ extern int precision_turns;
 
 extern int vampire_bonus;
 extern int vampire_turns;
-

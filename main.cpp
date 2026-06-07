@@ -11,6 +11,7 @@
 #include "utils.h"
 #include "menu.h"
 #include "save.h"
+#include "shop.h"
 
 using namespace std;
 
@@ -25,14 +26,14 @@ void game_intro() {
 
         while (true) {
             clear_screen();
-            cout << endl << "	Wykryto zapis gry!\n\n";
+            cout << endl << "\tWykryto zapis gry!\n\n";
 
             for (int i = 0; i < choice_amount; i++) {
                 if (i == choice) {
-                    cout << "	►  "; print_colored(choices[i], COLOR_BRIGHT_WHITE); cout << endl;
+                    cout << "\t►  "; print_colored(choices[i], COLOR_BRIGHT_WHITE); cout << endl;
                 }
                 else
-                    cout << "	  " << choices[i] << endl;
+                    cout << "\t  " << choices[i] << endl;
             }
 
             keyboard_button = _getch();
@@ -51,8 +52,10 @@ void game_intro() {
             else if (keyboard_button == 13) {
                 if (choice == 0) {
                     if (load_game()) {
+                        // Przelicz statystyki magiczne po wczytaniu
+                        recalculate_magic_stats();
                         clear_screen();
-                        cout << endl << "	Gra wczytana!\n\n";
+                        cout << endl << "\tGra wczytana!\n\n";
                         pause_game();
                         game_menu();
                         return;
@@ -68,17 +71,20 @@ void game_intro() {
 
     remove("save.sav");
     clear_screen();
-    cout << endl << "	Podaj swój nick: " << endl;
+    cout << endl << "\tPodaj swój nick: " << endl;
     cin >> nickname;
 
     clear_screen();
     cout << endl;
-    cout << "	Witaj " << nickname << "! Witaj w grze Legends of Wpierdol!" << endl;
-    cout << "	W skrócie:\n";
-    cout << "		- napierdalasz się z różnymi przeciwnikami\n";
-    cout << "		- za zdobyte pieniądze kupujesz różne bronie\n";
-    cout << "		- resztę ogarniesz sam :)\n\n";
+    cout << "\tWitaj " << nickname << "! Witaj w grze Legends of Wpierdol!" << endl;
+    cout << "\tW skrócie:\n";
+    cout << "\t\t- napierdalasz się z różnymi przeciwnikami\n";
+    cout << "\t\t- za zdobyte pieniądze kupujesz różne bronie\n";
+    cout << "\t\t- resztę ogarniesz sam :)\n\n";
     pause_game();
+
+    // ===== WYBÓR KLASY POSTACI =====
+    choose_player_class();
     game_menu();
 }
 
@@ -100,14 +106,14 @@ int main() {
 
     while (true) {
         clear_screen();
-        cout << endl << "	Legends of Wpierdol\n\n";
+        cout << endl << "\tLegends of Wpierdol\n\n";
 
         for (int i = 0; i < choice_amount; i++) {
             if (i == choice) {
-                cout << "	►  "; print_colored(choices[i], COLOR_BRIGHT_WHITE); cout << endl;
+                cout << "\t►  "; print_colored(choices[i], COLOR_BRIGHT_WHITE); cout << endl;
             }
             else
-                cout << "	  " << choices[i] << endl;
+                cout << "\t  " << choices[i] << endl;
         }
 
         keyboard_button = _getch();

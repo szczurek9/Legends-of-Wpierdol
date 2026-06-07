@@ -172,3 +172,34 @@ static void draw_player_hp_bar(int current, int maximum, int width = 20) {
     number_colored(maximum, COLOR_GREEN);
 }
 
+static void draw_player_mana_bar(int current, int maximum, int width = 20) {
+
+    float ratio = (float)current / maximum;
+    int filled = (int)(ratio * width);
+
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    print_colored("✦ [", COLOR_BLUE);
+
+    for (int i = 0; i < width; i++) {
+
+        if (i < filled) {
+            SetConsoleTextAttribute(hConsole, COLOR_BLUE);
+            cout << "█";
+        }
+        else {
+            SetConsoleTextAttribute(hConsole, 8);
+            cout << "░";
+        }
+    }
+
+    SetConsoleTextAttribute(hConsole, 7);
+
+    print_colored("] ", COLOR_BLUE);
+
+    number_colored(current, COLOR_BLUE);
+
+    cout << "/";
+
+    number_colored(maximum, COLOR_BLUE);
+}

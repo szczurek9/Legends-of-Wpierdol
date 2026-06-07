@@ -51,6 +51,24 @@ void save_game() {
 
     file << player_crit_chance << endl;
 
+    // Nowe zmienne: klasa, mana, magic stats
+    file << (int)player_class << endl;
+    file << player_class_bonus_ad << endl;
+    file << player_mana << endl;
+    file << player_maxmana << endl;
+    file << player_spell_power << endl;
+    file << player_magic_resist_pen << endl;
+    file << player_magic_resist << endl;
+    file << player_armor_pen << endl;
+    // enemy_armor_pen jest teraz polem w battle_enemy, nie trzeba zapisywać
+    file << enemy_stun_turns << endl;
+
+    // Sloty na itemy magiczne
+    file << magic_item_count << endl;
+    for (int i = 0; i < MAX_MAGIC_ITEMS; i++) {
+        file << magic_item_slots[i] << endl;
+    }
+
     file << inventory_count << endl;
 
     for (int i = 0; i < inventory_count; i++) {
@@ -105,7 +123,27 @@ bool load_game() {
     file >> vampire_bonus;
     file >> vampire_turns;
 
-    file >> player_crit_chance;  
+    file >> player_crit_chance;
+
+    // Nowe zmienne (kompatybilność: jeśli nie ma - zostają domyślne wartości)
+    int class_int = 0;
+    if (file >> class_int) {
+        player_class = (PlayerClass)class_int;
+        file >> player_class_bonus_ad;
+        file >> player_mana;
+        file >> player_maxmana;
+        file >> player_spell_power;
+        file >> player_magic_resist_pen;
+        file >> player_magic_resist;
+        file >> player_armor_pen;
+        // enemy_armor_pen jest teraz polem w battle_enemy, nie trzeba wczytywać
+        file >> enemy_stun_turns;
+
+        file >> magic_item_count;
+        for (int i = 0; i < MAX_MAGIC_ITEMS; i++) {
+            file >> magic_item_slots[i];
+        }
+    }
 
     file >> inventory_count;
 
@@ -133,7 +171,7 @@ void manual_save() {
     save_game();
 
     cout << endl;
-    cout << "	Gra została zapisana!\n";
+    cout << "\tGra została zapisana!\n";
     cout << endl;
 
     pause_game();

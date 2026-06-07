@@ -100,6 +100,23 @@ void game_menu() {
 
             cout << endl;
 
+            // Wyświetl klasę postaci
+            cout << "\t";
+            print_colored("Klasa: ", COLOR_BRIGHT_WHITE);
+            switch (player_class) {
+            case CLASS_ASSASSIN: print_colored("Zabójca", COLOR_RED); break;
+            case CLASS_MAGE:     print_colored("Mag", COLOR_BLUE); break;
+            case CLASS_TANK:     print_colored("Tank", COLOR_YELLOW); break;
+            case CLASS_WARRIOR:  print_colored("Wojownik", COLOR_GREEN); break;
+            default:             cout << "Brak"; break;
+            }
+            cout << " | ";
+            print_colored("Mana: ", COLOR_BLUE);
+            number_colored(player_mana, COLOR_BLUE);
+            cout << "/";
+            number_colored(player_maxmana, COLOR_BLUE);
+            cout << endl;
+
             cout << "\tBroń: ";
             print_colored(player_weapon_name, COLOR_CYAN);
 
@@ -229,7 +246,7 @@ void game_credits() {
         clear_screen();
         cout << "ESC - Powrot\n\n";
         cout << "	Twórcy\n\n";
-        cout << "	Legends of Wpierdol\n\n";
+        cout << "	Legends of Wpierdol - by MSLG Studios\n\n";
         cout << "	Programowanie:\n	szczurek9\n\n";
         cout << "	Balancing:\n	na pewno nie szczurek9\n\n";
         cout << "	Game Testing:\n	Owcacejk\n\n";
@@ -237,7 +254,7 @@ void game_credits() {
         cout << "	Specjalne podziękowania:\n";
         cout << "	Maximum412\n";
         cout << "	Galaxy S22\n	Akali mains\n	Valve za przycisk `\n\n";
-        cout << "	Version: 1.4\n\n";
+        cout << "	Version: 1.5\n\n";
         keyboard_button = _getch();
         if (keyboard_button == 27) return;
     }
@@ -245,7 +262,7 @@ void game_credits() {
 
 void game_options() {
     const int choice_amount = 5;
-    string choices[choice_amount] = { "Zapisz grę", "Zmień kolor nicku" ,"Pomoc", "Twórcy", "Wyjście z gry"};
+    string choices[choice_amount] = { "Zapisz grę", "Zmień kolor nicku" ,"Pomoc", "Twórcy", "Wyjście z gry" };
 
     while (true) {
         int choice = 0;
@@ -297,36 +314,95 @@ void game_inventory() {
 
         clear_screen();
 
-        cout << "\n	Ekwipunek\n\n";
+        cout << "\n\tEkwipunek\n\n";
 
-        if (inventory_count <= 0) {
-            cout << "	Brak przedmiotów.\n\n";
+        // Założone przedmioty magiczne
+        bool any_magic = false;
+        for (int i = 0; i < MAX_MAGIC_ITEMS; i++) {
+            if (magic_item_slots[i] >= 0) {
+                if (!any_magic) {
+                    any_magic = true;
+                }
+                int idx = magic_item_slots[i];
+                cout << "\tM" << i + 1 << " ";
+                print_colored(magic_items[idx].name, COLOR_BLUE);
+                cout << " | ";
+                r_ui_colored(magic_items[idx].price * 40 / 100, "$", COLOR_DARK_GREEN);
+                cout << "\n";
+            }
+        }
+        if (any_magic) cout << "\n";
+
+        if (inventory_count <= 0 && !any_magic) {
+            cout << "\tBrak przedmiotów.\n\n";
             pause_game();
             return;
         }
 
-        for (int i = 0; i < inventory_count; i++) {
+        if (inventory_count > 0) {
+            for (int i = 0; i < inventory_count; i++) {
 
-            cout << "\t" << i + 1 << ". ";
+                cout << "\t" << i + 1 << ". ";
 
-            print_colored(inventory[i].name, COLOR_CYAN);
+                print_colored(inventory[i].name, COLOR_CYAN);
 
-            cout << " | ";
+                cout << " | ";
 
-            number_colored(inventory[i].damage, COLOR_RED);
+                number_colored(inventory[i].damage, COLOR_RED);
 
-            cout << " DMG | ";
+                cout << " DMG | ";
 
-            r_ui_colored(inventory[i].price * 40 / 100, "$", COLOR_DARK_GREEN);
+                r_ui_colored(inventory[i].price * 40 / 100, "$", COLOR_DARK_GREEN);
 
-            cout << endl;
+                cout << endl;
+            }
         }
 
-        cout << "\n	0. Powrót";
-        cout << "\n\n	Wybierz: ";
+        cout << "\n\t0. Powrót";
+        cout << "\n\n\tWybierz: ";
 
-        int choice;
-        cin >> choice;
+        string input;
+        cin >> input;
+
+        // Slot magiczny: gracz wpisał np. "M1".."M6"
+        if (input.size() >= 2 && (input[0] == 'M' || input[0] == 'm')) {
+            int slot = (input[1] - '1'); // M1 -> 0, M2 -> 1, ...
+            if (slot < 0 || slot >= MAX_MAGIC_ITEMS || magic_item_slots[slot] < 0) {
+                continue;
+            }
+
+            int idx = magic_item_slots[slot];
+            clear_screen();
+            cout << "\n\t";
+            print_colored(magic_items[idx].name, COLOR_BLUE);
+            cout << "\n\n\t1. ";
+            print_colored("Zdejmij", COLOR_RED);
+            cout << "\n\t0. Powrót\n\n";
+
+            int magic_action;
+            cin >> magic_action;
+
+            if (magic_action == 1) {
+                int sell_price = magic_items[idx].price * 40 / 100;
+                magic_item_slots[slot] = -1;
+                magic_item_count--;
+                player_money += sell_price;
+                recalculate_magic_stats();
+                clear_screen();
+                cout << "\n";
+                cout << "\n\tZdjęto: ";
+                print_colored(magic_items[idx].name, COLOR_BLUE);
+                cout << "\n\tOdzyskano: ";
+                r_ui_colored(sell_price, "$", COLOR_DARK_GREEN);
+                cout << "\n";
+            }
+
+            pause_game();
+            continue;
+        }
+
+        // Broń z ekwipunku
+        int choice = stoi(input);
 
         if (choice == 0)
             return;
@@ -369,7 +445,7 @@ void game_inventory() {
             inventory[choice].damage = oldDamage;
             inventory[choice].price = oldPrice;
 
-            cout << "\n	Założono broń!\n";
+            cout << "\n\tZałożono broń!\n";
         }
         else if (action == 2) {
 
@@ -395,13 +471,14 @@ void game_inventory() {
 
 void game_armory() {
 
-    const int choice_amount = 4;
+    const int choice_amount = 5;
 
     string choices[choice_amount] = {
         "Rynek Broni",
         "Wzmocnienia",
         "Umiejętności",
-        "Alchemik"
+        "Alchemik",
+        "Magiczny Rynek"
     };
 
     while (true) {
@@ -467,6 +544,9 @@ void game_armory() {
             break;
         case 3:
             game_consumables();
+            break;
+        case 4:
+            game_magic_shop();
             break;
         }
     }
