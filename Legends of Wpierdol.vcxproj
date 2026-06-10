@@ -145,8 +145,6 @@
     <ClInclude Include="globals.h" />
     <ClInclude Include="battle.h" />
     <ClInclude Include="menu.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="resource1.h" />
     <ClInclude Include="resource2.h" />
     <ClInclude Include="shop.h" />
     <ClInclude Include="save.h" />

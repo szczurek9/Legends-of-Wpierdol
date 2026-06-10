@@ -1,12 +1,11 @@
 ﻿#pragma once
 
+#define NOMINMAX
 #include <iostream>
 #include <conio.h>
-#define byte win_byte_override
 #include <Windows.h>
-#undef byte
 
-using namespace std;
+
 
 static void set_color(int color) {
 
@@ -21,31 +20,31 @@ static void reset_color() {
     set_color(COLOR_WHITE);
 }
 
-static void print_colored(string text, int color) {
+static void print_colored(std::string text, int color) {
 
     set_color(color);
-    cout << text;
+    std::cout << text;
     reset_color();
 }
 
 static void number_colored(int text, int color) {
 
     set_color(color);
-    cout << text;
+    std::cout << text;
     reset_color();
 }
 
-static void ui_colored(string text, int number, int color) {
+static void ui_colored(std::string text, int number, int color) {
 
     set_color(color);
-    cout << text << number;
+    std::cout << text << number;
     reset_color();
 }
 
-static void r_ui_colored(int number, string text, int color) {
+static void r_ui_colored(int number, std::string text, int color) {
 
     set_color(color);
-    cout << number << text;
+    std::cout << number << text;
     reset_color();
 }
 
@@ -88,7 +87,7 @@ static void clear_screen() {
 
 static void pause_game() {
 
-    cout << "\n\tNaciśnij dowolny przycisk...";
+    std::cout << "\n\tNaciśnij dowolny przycisk...";
     _getch();
 }
 
@@ -102,11 +101,11 @@ static void draw_enemy_hp_bar(int current, int maximum, int width = 20) {
 
     number_colored(current, COLOR_RED);
 
-    cout << "/";
+    std::cout << "/";
 
     number_colored(maximum, COLOR_RED);
 
-    cout << " [";
+    std::cout << " [";
 
     for (int i = 0; i < width; i++) {
 
@@ -119,18 +118,18 @@ static void draw_enemy_hp_bar(int current, int maximum, int width = 20) {
             else
                 SetConsoleTextAttribute(hConsole, 12);
 
-            cout << "█";
+            std::cout << "█";
         }
         else {
 
             SetConsoleTextAttribute(hConsole, 8);
-            cout << "░";
+            std::cout << "░";
         }
     }
 
     SetConsoleTextAttribute(hConsole, 7);
 
-    cout << "] ";
+    std::cout << "] ";
 }
 
 static void draw_player_hp_bar(int current, int maximum, int width = 20) {
@@ -153,12 +152,12 @@ static void draw_player_hp_bar(int current, int maximum, int width = 20) {
             else
                 SetConsoleTextAttribute(hConsole, 12);
 
-            cout << "█";
+            std::cout << "█";
         }
         else {
 
             SetConsoleTextAttribute(hConsole, 8);
-            cout << "░";
+            std::cout << "░";
         }
     }
 
@@ -167,7 +166,7 @@ static void draw_player_hp_bar(int current, int maximum, int width = 20) {
     print_colored("] ", COLOR_GREEN);
     number_colored(current, COLOR_GREEN);
 
-    cout << "/";
+    std::cout << "/";
 
     number_colored(maximum, COLOR_GREEN);
 }
@@ -185,11 +184,11 @@ static void draw_player_mana_bar(int current, int maximum, int width = 20) {
 
         if (i < filled) {
             SetConsoleTextAttribute(hConsole, COLOR_BLUE);
-            cout << "█";
+            std::cout << "█";
         }
         else {
             SetConsoleTextAttribute(hConsole, 8);
-            cout << "░";
+            std::cout << "░";
         }
     }
 
@@ -199,7 +198,7 @@ static void draw_player_mana_bar(int current, int maximum, int width = 20) {
 
     number_colored(current, COLOR_BLUE);
 
-    cout << "/";
+    std::cout << "/";
 
     number_colored(maximum, COLOR_BLUE);
 }

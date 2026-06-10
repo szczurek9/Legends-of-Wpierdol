@@ -6,64 +6,63 @@
 #include "save.h"
 #include <iostream>
 #include <limits>
-using namespace std;
 
 void debug_console() {
     clear_screen();
-    string command;
+    std::string command;
     int value;
 
-    cout << "=== DEBUG CONSOLE ===\n\n";
-    cout << "Komendy:\n";
-    cout << "money <liczba> - dodaj pieniądze\n";
-    cout << "health <liczba> - ustaw ilosc zdrowia\n";
-    cout << "level <liczba> - ustaw level\n";
-    cout << "weapon <id> - ustaw broń\n";
-    cout << "Aby wyjść z konsoli rekomenduje wpisanie np. money 0\n\n";
-    cout << "> ";
+    std::cout << "=== DEBUG CONSOLE ===\n\n";
+    std::cout << "Komendy:\n";
+    std::cout << "money <liczba> - dodaj pieniądze\n";
+    std::cout << "health <liczba> - ustaw ilosc zdrowia\n";
+    std::cout << "level <liczba> - ustaw level\n";
+    std::cout << "weapon <id> - ustaw broń\n";
+    std::cout << "Aby wyjść z konsoli rekomenduje wpisanie np. money 0\n\n";
+    std::cout << "> ";
 
-    cin >> command >> value;
+    std::cin >> command >> value;
 
     if (command == "money") {
         if (value < 0) value = 0;
         player_money += value;
-        cout << "\nDodano $" << value << endl;
+        std::cout << "\nDodano $" << value << std::endl;
     }
     else if (command == "health") {
         if (value < 1) value = 1;
         player_health = value;
         if (player_health > player_maxhealth) player_health = player_maxhealth;
-        cout << "\nUstawiono HP na " << player_health << endl;
+        std::cout << "\nUstawiono HP na " << player_health << std::endl;
     }
     else if (command == "level") {
         if (value < 1) value = 1;
         if (value > enemy_amount) value = enemy_amount;
         player_level = value;
-        cout << "\nUstawiono level na " << player_level << endl;
+        std::cout << "\nUstawiono level na " << player_level << std::endl;
     }
     else if (command == "weapon") {
         if (value >= 0 && value < shop_weapon_amount) {
             player_weapon_name = shop[value].name;
             player_weapon_damage = shop[value].damage;
-            cout << "\nOtrzymano bron: " << player_weapon_name << endl;
+            std::cout << "\nOtrzymano bron: " << player_weapon_name << std::endl;
         }
         else {
-            cout << "\nNiepoprawne ID broni!\n";
+            std::cout << "\nNiepoprawne ID broni!\n";
         }
     }
     else {
-        cout << "\nNieznana komenda!\n";
+        std::cout << "\nNieznana komenda!\n";
     }
 
-    cout << endl;
-    cin.clear();
+    std::cout << std::endl;
+    std::cin.clear();
     pause_game();
 }
 
 void game_menu() {
     const int choice_amount = 4;
 
-    string choices[choice_amount] = {
+    std::string choices[choice_amount] = {
         "Graj",
         "Zbrojownia",
         "Ekwipunek",
@@ -76,63 +75,63 @@ void game_menu() {
 
         while (true) {
             clear_screen();
-            cout << endl;
+            std::cout << std::endl;
 
-            cout << "\tNick: ";
+            std::cout << "\tNick: ";
             print_colored(nickname, player_nickname_color);
 
-            cout << " | ";
+            std::cout << " | ";
             ui_colored("LVL: ", player_level, COLOR_BLUE);
 
-            cout << endl;
+            std::cout << std::endl;
 
-            cout << "\t";
+            std::cout << "\t";
             ui_colored("HP: ", player_health, COLOR_GREEN);
             ui_colored("/", player_maxhealth, COLOR_GREEN);
 
-            cout << " | ";
+            std::cout << " | ";
             ui_colored("Pancerz: ", player_armor, COLOR_YELLOW);
 
-            cout << endl;
+            std::cout << std::endl;
 
-            cout << "\t";
+            std::cout << "\t";
             ui_colored("Hajs: $", player_money, COLOR_DARK_GREEN);
 
-            cout << endl;
+            std::cout << std::endl;
 
             // Wyświetl klasę postaci
-            cout << "\t";
+            std::cout << "\t";
             print_colored("Klasa: ", COLOR_BRIGHT_WHITE);
             switch (player_class) {
             case CLASS_ASSASSIN: print_colored("Zabójca", COLOR_RED); break;
             case CLASS_MAGE:     print_colored("Mag", COLOR_BLUE); break;
             case CLASS_TANK:     print_colored("Tank", COLOR_YELLOW); break;
             case CLASS_WARRIOR:  print_colored("Wojownik", COLOR_GREEN); break;
-            default:             cout << "Brak"; break;
+            default:             std::cout << "Brak"; break;
             }
-            cout << " | ";
+            std::cout << " | ";
             print_colored("Mana: ", COLOR_BLUE);
             number_colored(player_mana, COLOR_BLUE);
-            cout << "/";
+            std::cout << "/";
             number_colored(player_maxmana, COLOR_BLUE);
-            cout << endl;
+            std::cout << std::endl;
 
-            cout << "\tBroń: ";
+            std::cout << "\tBroń: ";
             print_colored(player_weapon_name, COLOR_CYAN);
 
-            cout << " - ";
+            std::cout << " - ";
             r_ui_colored(player_weapon_damage, " DMG", COLOR_RED);
 
-            cout << " | Kryt: ";
+            std::cout << " | Kryt: ";
             r_ui_colored(player_crit_chance, "%", COLOR_PURPLE);
 
-            cout << endl << endl;
+            std::cout << std::endl << std::endl;
             for (int i = 0; i < choice_amount; i++) {
                 if (i == choice) {
-                    cout << "	►  "; print_colored(choices[i], COLOR_BRIGHT_WHITE); cout << endl;
+                    std::cout << "	►  "; print_colored(choices[i], COLOR_BRIGHT_WHITE); std::cout << std::endl;
                 }
                 else
-                    cout << "	  " << choices[i] << endl;
+                    std::cout << "	  " << choices[i] << std::endl;
             }
 
             keyboard_button = _getch();
@@ -169,12 +168,12 @@ void game_help_battle() {
     int keyboard_button;
     while (true) {
         clear_screen();
-        cout << "ESC - Powrót\n\n";
-        cout << "	Walka\n";
-        cout << "		1. Walka w Legends of Wpierdol działa podobnie do systemu walki w Pokemonach.\n";
-        cout << "		   Gracz atakuje swoją bronią a gra wylicza prawdopodobieństwo trafienia ataku:\n";
-        cout << "		   Jeżeli trafi - zadaje obrażenia przeciwnikowi, jeśli nie - przeciwnikowi\n";
-        cout << "		   nic się nie stanie. Potem przeciwnik atakuje w taki sam sposób.\n";
+        std::cout << "ESC - Powrót\n\n";
+        std::cout << "	Walka\n";
+        std::cout << "		1. Walka w Legends of Wpierdol działa podobnie do systemu walki w Pokemonach.\n";
+        std::cout << "		   Gracz atakuje swoją bronią a gra wylicza prawdopodobieństwo trafienia ataku:\n";
+        std::cout << "		   Jeżeli trafi - zadaje obrażenia przeciwnikowi, jeśli nie - przeciwnikowi\n";
+        std::cout << "		   nic się nie stanie. Potem przeciwnik atakuje w taki sam sposób.\n";
         keyboard_button = _getch();
         if (keyboard_button == 27) return;
     }
@@ -184,12 +183,12 @@ void game_help_shop() {
     int keyboard_button;
     while (true) {
         clear_screen();
-        cout << "ESC - Powrót\n\n";
-        cout << "	Zbrojownia\n";
-        cout << "		1. W Legends of Wpierdol sklep działa w taki sposób że zakup broni wrzuca\n";
-        cout << "		   aktualną broń z twojego ekwipunku.\n\n";
-        cout << "		2. Wzmocnienia dają dodatkowe statystyki do gracza.\n";
-        cout << "		3. Umiejętności dają dodatkowe, unikalne statystyki.\n";
+        std::cout << "ESC - Powrót\n\n";
+        std::cout << "	Zbrojownia\n";
+        std::cout << "		1. W Legends of Wpierdol sklep działa w taki sposób że zakup broni wrzuca\n";
+        std::cout << "		   aktualną broń z twojego ekwipunku.\n\n";
+        std::cout << "		2. Wzmocnienia dają dodatkowe statystyki do gracza.\n";
+        std::cout << "		3. Umiejętności dają dodatkowe, unikalne statystyki.\n";
         keyboard_button = _getch();
         if (keyboard_button == 27) return;
     }
@@ -197,7 +196,7 @@ void game_help_shop() {
 
 void game_help() {
     const int choice_amount = 2;
-    string choices[choice_amount] = { "Walka", "Sklep, Wzmocnienia i Umiejętności" };
+    std::string choices[choice_amount] = { "Walka", "Sklep, Wzmocnienia i Umiejętności" };
 
     while (true) {
         int choice = 0;
@@ -205,15 +204,15 @@ void game_help() {
 
         while (true) {
             clear_screen();
-            cout << "ESC - Powrót\n\n";
-            cout << "	Pomoc\n\n	Wybierz temat:\n\n";
+            std::cout << "ESC - Powrót\n\n";
+            std::cout << "	Pomoc\n\n	Wybierz temat:\n\n";
 
             for (int i = 0; i < choice_amount; i++) {
                 if (i == choice) {
-                    cout << "	►  "; print_colored(choices[i], COLOR_BRIGHT_WHITE); cout << endl;
+                    std::cout << "	►  "; print_colored(choices[i], COLOR_BRIGHT_WHITE); std::cout << std::endl;
                 }
                 else
-                    cout << "	  " << choices[i] << endl;
+                    std::cout << "	  " << choices[i] << std::endl;
             }
 
             keyboard_button = _getch();
@@ -244,17 +243,17 @@ void game_credits() {
     int keyboard_button;
     while (true) {
         clear_screen();
-        cout << "ESC - Powrot\n\n";
-        cout << "	Twórcy\n\n";
-        cout << "	Legends of Wpierdol - by MSLG Studios\n\n";
-        cout << "	Programowanie:\n	szczurek9\n\n";
-        cout << "	Balancing:\n	na pewno nie szczurek9\n\n";
-        cout << "	Game Testing:\n	Owcacejk\n\n";
-        cout << "	Bug Fixer:\n	Mispolarny1\n\n";
-        cout << "	Specjalne podziękowania:\n";
-        cout << "	Maximum412\n";
-        cout << "	Galaxy S22\n	Akali mains\n	Valve za przycisk `\n\n";
-        cout << "	Version: 1.5\n\n";
+        std::cout << "ESC - Powrot\n\n";
+        std::cout << "	Twórcy\n\n";
+        std::cout << "	Legends of Wpierdol - by MSLG Studios\n\n";
+        std::cout << "	Programowanie:\n	szczurek9\n\n";
+        std::cout << "	Balancing:\n	Owcacejk i na pewno nie szczurek9\n\n";
+        std::cout << "	Game Testing:\n	Owcacejk\n\n";
+        std::cout << "	Bug Fixer:\n	Mispolarny1\n\n";
+        std::cout << "	Specjalne podziękowania:\n";
+        std::cout << "	Maximum412\n";
+        std::cout << "	Galaxy S22\n	Akali mains\n	Valve za przycisk `\n\n";
+        std::cout << "	Version: 1.5.1\n\n";
         keyboard_button = _getch();
         if (keyboard_button == 27) return;
     }
@@ -262,7 +261,7 @@ void game_credits() {
 
 void game_options() {
     const int choice_amount = 5;
-    string choices[choice_amount] = { "Zapisz grę", "Zmień kolor nicku" ,"Pomoc", "Twórcy", "Wyjście z gry" };
+    std::string choices[choice_amount] = { "Zapisz grę", "Zmień kolor nicku" ,"Pomoc", "Twórcy", "Wyjście z gry" };
 
     while (true) {
         int choice = 0;
@@ -270,15 +269,15 @@ void game_options() {
 
         while (true) {
             clear_screen();
-            cout << "ESC - Powrót\n\n";
-            cout << "	Opcje:\n\n";
+            std::cout << "ESC - Powrót\n\n";
+            std::cout << "	Opcje:\n\n";
 
             for (int i = 0; i < choice_amount; i++) {
                 if (i == choice) {
-                    cout << "	►  "; print_colored(choices[i], COLOR_BRIGHT_WHITE); cout << endl;
+                    std::cout << "	►  "; print_colored(choices[i], COLOR_BRIGHT_WHITE); std::cout << std::endl;
                 }
                 else
-                    cout << "	  " << choices[i] << endl;
+                    std::cout << "	  " << choices[i] << std::endl;
             }
 
             keyboard_button = _getch();
@@ -314,7 +313,7 @@ void game_inventory() {
 
         clear_screen();
 
-        cout << "\n\tEkwipunek\n\n";
+        std::cout << "\n\tEkwipunek\n\n";
 
         // Założone przedmioty magiczne
         bool any_magic = false;
@@ -324,17 +323,17 @@ void game_inventory() {
                     any_magic = true;
                 }
                 int idx = magic_item_slots[i];
-                cout << "\tM" << i + 1 << " ";
+                std::cout << "\tM" << i + 1 << " ";
                 print_colored(magic_items[idx].name, COLOR_BLUE);
-                cout << " | ";
+                std::cout << " | ";
                 r_ui_colored(magic_items[idx].price * 40 / 100, "$", COLOR_DARK_GREEN);
-                cout << "\n";
+                std::cout << "\n";
             }
         }
-        if (any_magic) cout << "\n";
+        if (any_magic) std::cout << "\n";
 
         if (inventory_count <= 0 && !any_magic) {
-            cout << "\tBrak przedmiotów.\n\n";
+            std::cout << "\tBrak przedmiotów.\n\n";
             pause_game();
             return;
         }
@@ -342,27 +341,27 @@ void game_inventory() {
         if (inventory_count > 0) {
             for (int i = 0; i < inventory_count; i++) {
 
-                cout << "\t" << i + 1 << ". ";
+                std::cout << "\t" << i + 1 << ". ";
 
                 print_colored(inventory[i].name, COLOR_CYAN);
 
-                cout << " | ";
+                std::cout << " | ";
 
                 number_colored(inventory[i].damage, COLOR_RED);
 
-                cout << " DMG | ";
+                std::cout << " DMG | ";
 
                 r_ui_colored(inventory[i].price * 40 / 100, "$", COLOR_DARK_GREEN);
 
-                cout << endl;
+                std::cout << std::endl;
             }
         }
 
-        cout << "\n\t0. Powrót";
-        cout << "\n\n\tWybierz: ";
+        std::cout << "\n\t0. Powrót";
+        std::cout << "\n\n\tWybierz: ";
 
-        string input;
-        cin >> input;
+        std::string input;
+        std::cin >> input;
 
         // Slot magiczny: gracz wpisał np. "M1".."M6"
         if (input.size() >= 2 && (input[0] == 'M' || input[0] == 'm')) {
@@ -373,14 +372,14 @@ void game_inventory() {
 
             int idx = magic_item_slots[slot];
             clear_screen();
-            cout << "\n\t";
+            std::cout << "\n\t";
             print_colored(magic_items[idx].name, COLOR_BLUE);
-            cout << "\n\n\t1. ";
+            std::cout << "\n\n\t1. ";
             print_colored("Zdejmij", COLOR_RED);
-            cout << "\n\t0. Powrót\n\n";
+            std::cout << "\n\t0. Powrót\n\n";
 
             int magic_action;
-            cin >> magic_action;
+            std::cin >> magic_action;
 
             if (magic_action == 1) {
                 int sell_price = magic_items[idx].price * 40 / 100;
@@ -389,12 +388,12 @@ void game_inventory() {
                 player_money += sell_price;
                 recalculate_magic_stats();
                 clear_screen();
-                cout << "\n";
-                cout << "\n\tZdjęto: ";
+                std::cout << "\n";
+                std::cout << "\n\tZdjęto: ";
                 print_colored(magic_items[idx].name, COLOR_BLUE);
-                cout << "\n\tOdzyskano: ";
+                std::cout << "\n\tOdzyskano: ";
                 r_ui_colored(sell_price, "$", COLOR_DARK_GREEN);
-                cout << "\n";
+                std::cout << "\n";
             }
 
             pause_game();
@@ -402,7 +401,7 @@ void game_inventory() {
         }
 
         // Broń z ekwipunku
-        int choice = stoi(input);
+        int choice = std::stoi(input);
 
         if (choice == 0)
             return;
@@ -414,26 +413,26 @@ void game_inventory() {
 
         clear_screen();
 
-        cout << "\n\t";
+        std::cout << "\n\t";
         print_colored(inventory[choice].name, COLOR_CYAN);
-        cout << endl;
+        std::cout << std::endl;
 
-        cout << "\t1. ";
+        std::cout << "\t1. ";
         print_colored("Załóż", COLOR_GREEN);
-        cout << endl;
+        std::cout << std::endl;
 
-        cout << "\t2. ";
+        std::cout << "\t2. ";
         print_colored("Sprzedaj", COLOR_RED);
-        cout << endl;
+        std::cout << std::endl;
 
-        cout << "\t0. Powrót\n\n";
+        std::cout << "\t0. Powrót\n\n";
 
         int action;
-        cin >> action;
+        std::cin >> action;
 
         if (action == 1) {
 
-            string oldName = player_weapon_name;
+            std::string oldName = player_weapon_name;
             int oldDamage = player_weapon_damage;
             int oldPrice = player_weapon_price;
 
@@ -445,7 +444,7 @@ void game_inventory() {
             inventory[choice].damage = oldDamage;
             inventory[choice].price = oldPrice;
 
-            cout << "\n\tZałożono broń!\n";
+            std::cout << "\n\tZałożono broń!\n";
         }
         else if (action == 2) {
 
@@ -460,9 +459,9 @@ void game_inventory() {
 
             inventory_count--;
 
-            cout << "\n\tSprzedano za ";
+            std::cout << "\n\tSprzedano za ";
             r_ui_colored(money, "$", COLOR_DARK_GREEN);
-            cout << "!\n";
+            std::cout << "!\n";
         }
 
         pause_game();
@@ -473,7 +472,7 @@ void game_armory() {
 
     const int choice_amount = 5;
 
-    string choices[choice_amount] = {
+    std::string choices[choice_amount] = {
         "Rynek Broni",
         "Wzmocnienia",
         "Umiejętności",
@@ -486,18 +485,37 @@ void game_armory() {
         int choice = 0;
         int keyboard_button;
 
+        int menuColors[choice_amount] = {
+            COLOR_CYAN,      // Rynek Broni
+            COLOR_YELLOW,    // Wzmocnienia
+            COLOR_PURPLE,    // Umiejętności
+            COLOR_GREEN,     // Alchemik
+            COLOR_BLUE       // Magiczny Rynek
+        };
+
         while (true) {
 
             clear_screen();
-            cout << "ESC - Powrót\n\n";
-            cout << "	Zbrojownia\n\n";
+
+            std::cout << "ESC - Powrót\n\n";
+
+            print_colored("\t⚔ Zbrojownia ⚔", COLOR_YELLOW);
+            std::cout << "\n\n";
 
             for (int i = 0; i < choice_amount; i++) {
+
                 if (i == choice) {
-                    cout << "	►  "; print_colored(choices[i], COLOR_BRIGHT_WHITE); cout << endl;
+
+                    print_colored("\t ► ", COLOR_BRIGHT_WHITE);
+                    print_colored(choices[i], menuColors[i]);
                 }
-                else
-                    cout << "	  " << choices[i] << endl;
+                else {
+
+                    std::cout << "\t  ";
+                    print_colored(choices[i], menuColors[i]);
+                }
+
+                std::cout << std::endl;
             }
 
             keyboard_button = _getch();
@@ -556,7 +574,7 @@ void game_nickname_color() {
 
     const int color_amount = 15;
 
-    string color_names[color_amount] = {
+    std::string color_names[color_amount] = {
         "Biały",
         "Jasny Biały",
 
@@ -612,21 +630,21 @@ void game_nickname_color() {
 
         clear_screen();
 
-        cout << "ESC - Powrót\n\n";
-        cout << "\tKolor Nicku\n\n";
+        std::cout << "ESC - Powrót\n\n";
+        std::cout << "\tKolor Nicku\n\n";
 
         for (int i = 0; i < color_amount; i++) {
 
             if (i == choice)
-                cout << "\t► ";
+                std::cout << "\t► ";
             else
-                cout << "\t  ";
+                std::cout << "\t  ";
 
             set_color(colors[i]);
-            cout << color_names[i];
+            std::cout << color_names[i];
             reset_color();
 
-            cout << endl;
+            std::cout << std::endl;
         }
 
         int key = _getch();
@@ -656,7 +674,7 @@ void game_nickname_color() {
 
             clear_screen();
 
-            cout << "\n\tZmieniono kolor nicku!\n\n";
+            std::cout << "\n\tZmieniono kolor nicku!\n\n";
 
             pause_game();
 

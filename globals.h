@@ -1,17 +1,16 @@
 ﻿#pragma once
 #include <string>
-using namespace std;
 
 // Struktury
 struct shop_weapons {
-    string name;
+    std::string name;
     int price;
     int damage;
 };
 
 struct battle_enemy {
     int lvl;
-    string name;
+    std::string name;
     int health;
     int damage;
     int atk_chance;
@@ -27,39 +26,39 @@ struct battle_enemy {
 };
 
 struct InventoryWeapon {
-    string name;
+    std::string name;
     int damage;
     int price;
 };
 
 struct upgrade_item {
-    string name;
+    std::string name;
     int price;
-    string description;
+    std::string description;
 };
 
 struct skill_item {
-    string name;
+    std::string name;
     int price;
-    string description;
+    std::string description;
 };
 
 struct consumable_item {
-    string name;
+    std::string name;
     int price;
-    string description;
+    std::string description;
 };
 
-// Przedmiot magiczny (max 6 slotów)
+// Przedmiot magiczny (std::max 6 slotów)
 struct magic_item_def {
-    string name;
+    std::string name;
     int price;
     int bonus_mana;
     int bonus_spell_power;
     int magic_resist_pen;  // przebicie odporności magicznej przeciwnika
     int bonus_magic_resist; // odporność magiczna gracza
     int base_mana_regen_bonus; // bonus do bazowej regeneracji many (%)
-    string description;
+    std::string description;
 };
 
 enum ConsoleColor {
@@ -94,12 +93,12 @@ enum PlayerClass {
 };
 
 // Zmienne gracza
-extern string nickname;
+extern std::string nickname;
 extern int player_level;
 extern int player_money;
 extern int player_health;
 extern int player_maxhealth;
-extern string player_weapon_name;
+extern std::string player_weapon_name;
 extern int player_weapon_damage;
 extern bool player_used_escape;
 
@@ -143,9 +142,9 @@ extern PlayerClass player_class;
 // Bonus AD z klasy (osobny od broni, nie nadpisywany przez zakup)
 extern int player_class_bonus_ad;
 
-// Sloty na przedmioty magiczne (max 6)
+// Sloty na przedmioty magiczne (std::max 6)
 extern const int MAX_MAGIC_ITEMS;
-extern int magic_item_slots[6];        // indeksy założonych itemów (-1 = pusty slot)
+extern int magic_item_slots[10];        // indeksy założonych itemów (-1 = pusty slot)
 extern int magic_item_count;           // ile przedmiotów założonych
 
 // Fale
@@ -185,3 +184,30 @@ extern int precision_turns;
 
 extern int vampire_bonus;
 extern int vampire_turns;
+
+// Overkill (nadmiarowe obrażenia przechowane)
+extern int overkill_stored;          // przechowane obrażenia Overkill
+extern bool overkill_armor_ignore;   // czy następny atak ignoruje 80% pancerza
+
+// Wampiryzm magiczny (Spell Vamp)
+extern int player_spell_vamp;        // % leczenia z obrażeń magicznych (std::max 30)
+extern const int MAX_SPELL_VAMP;
+
+// Cooldowny spelli Zabójcy
+extern int cd_primal_strike;         // 0 = gotowy (brak CD)
+extern int cd_undodgable_speed;      // tury do końca cooldownu
+extern int cd_slayer_of_slowest;     // tury do końca cooldownu
+
+// Cooldowny spelli Maga
+extern int cd_star_strike;
+extern int cd_deadly_vines;
+extern int cd_mirror_of_death;
+// Powiew Burzy i Primal Strike: brak CD
+
+// Aktywne efekty spelli Zabójcy
+extern bool primal_strike_active;    // następny atak zawsze krytuje
+extern int undodgable_turns;         // ile tur pozostało efektu
+extern bool slayer_next_active;      // następny atak Pogromcy gotowy
+
+// Mirror of Death: flaga gotowości (aktywowana przez spell, wypalana przy ataku wroga)
+extern bool mirror_active;

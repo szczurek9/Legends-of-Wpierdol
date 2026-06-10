@@ -4,78 +4,91 @@
 #include <fstream>
 #include <iostream>
 
-using namespace std;
 
 bool save_exists() {
 
-    ifstream file("save.LoW_save");
+    std::ifstream file("save.LoW_save");
     return file.good();
 }
 
 void save_game() {
 
-    ofstream file("save.LoW_save");
+    std::ofstream file("save.LoW_save");
 
     if (!file)
         return;
 
-    file << nickname << endl;
-    file << player_nickname_color << endl;
+    file << nickname << std::endl;
+    file << player_nickname_color << std::endl;
 
-    file << player_level << endl;
-    file << player_money << endl;
+    file << player_level << std::endl;
+    file << player_money << std::endl;
 
-    file << player_health << endl;
-    file << player_maxhealth << endl;
+    file << player_health << std::endl;
+    file << player_maxhealth << std::endl;
 
-    file << player_weapon_name << endl;
-    file << player_weapon_damage << endl;
-    file << player_weapon_price << endl;
+    file << player_weapon_name << std::endl;
+    file << player_weapon_damage << std::endl;
+    file << player_weapon_price << std::endl;
 
-    file << player_lifesteal << endl;
-    file << player_bonus_accuracy << endl;
+    file << player_lifesteal << std::endl;
+    file << player_bonus_accuracy << std::endl;
 
-    file << player_armor << endl;
-    file << player_second_breath << endl;
+    file << player_armor << std::endl;
+    file << player_second_breath << std::endl;
 
-    file << player_health_potion << endl;
+    file << player_health_potion << std::endl;
 
-    file << player_precision_potion << endl;
-    file << player_vampire_potion << endl;
+    file << player_precision_potion << std::endl;
+    file << player_vampire_potion << std::endl;
 
-    file << precision_bonus << endl;
-    file << precision_turns << endl;
+    file << precision_bonus << std::endl;
+    file << precision_turns << std::endl;
 
-    file << vampire_bonus << endl;
-    file << vampire_turns << endl;
+    file << vampire_bonus << std::endl;
+    file << vampire_turns << std::endl;
 
-    file << player_crit_chance << endl;
+    file << player_crit_chance << std::endl;
 
     // Nowe zmienne: klasa, mana, magic stats
-    file << (int)player_class << endl;
-    file << player_class_bonus_ad << endl;
-    file << player_mana << endl;
-    file << player_maxmana << endl;
-    file << player_spell_power << endl;
-    file << player_magic_resist_pen << endl;
-    file << player_magic_resist << endl;
-    file << player_armor_pen << endl;
+    file << (int)player_class << std::endl;
+    file << player_class_bonus_ad << std::endl;
+    file << player_mana << std::endl;
+    file << player_maxmana << std::endl;
+    file << player_spell_power << std::endl;
+    file << player_magic_resist_pen << std::endl;
+    file << player_magic_resist << std::endl;
+    file << player_armor_pen << std::endl;
     // enemy_armor_pen jest teraz polem w battle_enemy, nie trzeba zapisywać
-    file << enemy_stun_turns << endl;
+    file << enemy_stun_turns << std::endl;
 
     // Sloty na itemy magiczne
-    file << magic_item_count << endl;
+    file << magic_item_count << std::endl;
     for (int i = 0; i < MAX_MAGIC_ITEMS; i++) {
-        file << magic_item_slots[i] << endl;
+        file << magic_item_slots[i] << std::endl;
     }
 
-    file << inventory_count << endl;
+    // Nowe zmienne v1.6: Overkill, Spell Vamp, cooldowny, aktywne efekty
+    file << overkill_stored << std::endl;
+    file << overkill_armor_ignore << std::endl;
+    file << player_spell_vamp << std::endl;
+    file << cd_primal_strike << std::endl;
+    file << cd_undodgable_speed << std::endl;
+    file << cd_slayer_of_slowest << std::endl;
+    file << cd_star_strike << std::endl;
+    file << cd_deadly_vines << std::endl;
+    file << cd_mirror_of_death << std::endl;
+    file << primal_strike_active << std::endl;
+    file << undodgable_turns << std::endl;
+    file << mirror_active << std::endl;
+
+    file << inventory_count << std::endl;
 
     for (int i = 0; i < inventory_count; i++) {
 
-        file << inventory[i].name << endl;
-        file << inventory[i].damage << endl;
-        file << inventory[i].price << endl;
+        file << inventory[i].name << std::endl;
+        file << inventory[i].damage << std::endl;
+        file << inventory[i].price << std::endl;
     }
 
     file.close();
@@ -83,12 +96,12 @@ void save_game() {
 
 bool load_game() {
 
-    ifstream file("save.LoW_save");
+    std::ifstream file("save.LoW_save");
 
     if (!file)
         return false;
 
-    getline(file, nickname);
+    std::getline(file, nickname);
 
     file >> player_nickname_color;
     file.ignore();
@@ -101,7 +114,7 @@ bool load_game() {
 
     file.ignore();
 
-    getline(file, player_weapon_name);
+    std::getline(file, player_weapon_name);
 
     file >> player_weapon_damage;
     file >> player_weapon_price;
@@ -143,6 +156,23 @@ bool load_game() {
         for (int i = 0; i < MAX_MAGIC_ITEMS; i++) {
             file >> magic_item_slots[i];
         }
+
+        // Nowe zmienne v1.6: Overkill, Spell Vamp, cooldowny, aktywne efekty
+        int ov_stored, ov_ignore, sv, cps, cus, css, css2, cdv, cmd, psa, ut, ma;
+        if (file >> ov_stored) {
+            overkill_stored = ov_stored;
+            file >> ov_ignore; overkill_armor_ignore = (bool)ov_ignore;
+            file >> sv;        player_spell_vamp = sv;
+            file >> cps;       cd_primal_strike = cps;
+            file >> cus;       cd_undodgable_speed = cus;
+            file >> css;       cd_slayer_of_slowest = css;
+            file >> css2;      cd_star_strike = css2;
+            file >> cdv;       cd_deadly_vines = cdv;
+            file >> cmd;       cd_mirror_of_death = cmd;
+            file >> psa;       primal_strike_active = (bool)psa;
+            file >> ut;        undodgable_turns = ut;
+            file >> ma;        mirror_active = (bool)ma;
+        }
     }
 
     file >> inventory_count;
@@ -151,7 +181,7 @@ bool load_game() {
 
     for (int i = 0; i < inventory_count; i++) {
 
-        getline(file, inventory[i].name);
+        std::getline(file, inventory[i].name);
 
         file >> inventory[i].damage;
         file >> inventory[i].price;
@@ -170,9 +200,9 @@ void manual_save() {
 
     save_game();
 
-    cout << endl;
-    cout << "\tGra została zapisana!\n";
-    cout << endl;
+    std::cout << std::endl;
+    std::cout << "\tGra została zapisana!\n";
+    std::cout << std::endl;
 
     pause_game();
 }

@@ -1,12 +1,12 @@
 #include <clocale>
 #include "globals.h"
 
-string nickname;
+std::string nickname;
 int player_level = 1;
 int player_money = 5;
 int player_health = 100;
 int player_maxhealth = 100;
-string player_weapon_name = "nic";
+std::string player_weapon_name = "nic";
 int player_weapon_damage = 0;
 bool player_used_escape = false;
 
@@ -64,9 +64,9 @@ PlayerClass player_class = CLASS_NONE;
 // Bonus AD z klasy (osobny, nie nadpisywany przez zakup broni)
 int player_class_bonus_ad = 0;
 
-// Sloty na itemy magiczne (max 6)
-const int MAX_MAGIC_ITEMS = 6;
-int magic_item_slots[6] = { -1, -1, -1, -1, -1, -1 };
+// Sloty na itemy magiczne (std::max 6)
+const int MAX_MAGIC_ITEMS = 10;
+int magic_item_slots[10] = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
 int magic_item_count = 0;
 
 battle_enemy enemy[] = {
@@ -118,7 +118,19 @@ battle_enemy enemy[] = {
 	{    37, "Walter White",                  14000, 500,  75,  40,   26,   74,  false,  3,   340, 70,  70,  40 },
 	{    38, "Owcacejk",                      15000, 600,  76,  40,   24,   76,  false,  3,   367, 72,  70,  40 },
 	{    39, "Pan Ryszard",                   16000, 700,  80,  40,   22,   78,  false,  3,   400, 75,  75,  40 },
-	{    40, "Legenda Wpierdolu",             15000, 650,  90,  40,   20,   80,   true,  5,   500, 80,  80,  50 }
+	{    40, "Legenda Wpierdolu",             15000, 650,  90,  40,   20,   80,   true,  5,   500, 80,  80,  50 },
+
+	{    41,  "Poman Rytka (prime)",	      17000, 750,   80,  45,   20,   80,  false, 4,     525, 85,  75,  45},
+	{    42,  "Torta",						  18000, 800,   80,  45,   20,   75,  false, 4,     550, 90,  90,  45},
+	{    43,  "Bigos",						  18500, 850,   81,  40,   19,   80,  false, 4,     575, 90,  100, 50},
+	{    44,  "Kassadin (L9)",				  19000, 875,   83,  50,   18,   81,  false, 4,     600, 95,  99,  50},
+	{    45,  "Nero z DMC",					  18250, 800,   85,  50,   18,   82,  true,  5,     650, 100, 100, 55},
+	{    46,  "Malzahar (outplay mode)",	  21370, 925,   85,  50,   18,   82,  false, 4,     700, 99,  100, 55},
+	{    47,  "Byczkowska",					  22000, 950,   86,  52,   17,   83,  false, 4,     725, 110, 110, 56},
+	{    48,  "Benek",						  23000, 975,   87,  53,   17,   83,  false, 4,     750, 115, 105, 57},
+	{    49,  "Błażej",			              24000, 999,   89,  54,   16,   84,  false, 4,     775, 120, 115, 59},
+	{    50,  "Pobłocki po szlugu",	          22500, 900,   90,  55,   15,   85,  true,  5,     800, 125, 125, 60}
+
 };
 
 shop_weapons shop[] = {
@@ -141,7 +153,13 @@ shop_weapons shop[] = {
 	{"Mantis Blades", 2700, 930},
 	{"Malorian 3516", 3000, 1000},
 	{"GTX 1080 TI", 3600, 1800},
-	{"Nokia 3310", 4800, 3310}
+	{"Nokia 3310", 4800, 3310},
+	{"Desert Eagle",  	5000,  4000 },
+	{"RAM DDR4", 6700,  5444 },
+	{"AWP Dragonlore", 7777,  6767 },
+	{"Red Bull GreatSword", 10000, 8120 },
+	{"Lightsaber", 12000, 9800 },
+	{"Devil Sword Dante", 15000, 12255 }
 };
 
 upgrade_item upgrades[] = {
@@ -149,26 +167,27 @@ upgrade_item upgrades[] = {
 	{"Skała Zdrowia", 180, "   +50 maksymalnego ♥"},
 	{"Woda Życia", 560, "   +160 maksymalnego ♥"},
 	{"Kolczuga", 220, "   +15 pancerza"},
-	{"Kolce Odwetu", 350, "   +10 przebicia pancerza przeciwnika"}
+	{"Kolce Odwetu", 350, "   +10 przebicia pancerza przeciwnika (maksymalnie 70)"}
 };
 
 skill_item abilities[] = {
 
-	{"Wampiryczne Ostrze", 580, "   Leczy za 10% zadanych obrazeń (maksymalnie 20%)"},
+	{"Wampiryczne Ostrze", 580, "   Leczy za 10% zadanych obrażeń [Fizyczne] (maksymalnie 20%)"},
 	{"Kryształ Skupienia", 420, "   15% mniejsza szansa na nietrafienie ataku (maksymalnie 30%)"},
 	{"Pierścień Zabójcy", 500, "   10% szansy na trafienie krytyczne (do 50%)"},
 	{"Płaszcz Assasyna", 1000, "   10% szansy na trafienie krytyczne (powyżej 50%)"},
-	{"Drugie Tchnienie", 275, "   Pokonanie przeciwnika leczy cię o 25% maksymalnego ♥"}
+	{"Drugie Tchnienie", 275, "   Pokonanie przeciwnika leczy cię o 25% maksymalnego ♥"},
+	{"Dłonie Wampira", 520, "   Leczysz się 15% zadawanych obrażeń [Magiczne], limit 30%"}
 };
 
 consumable_item consumables[] = {
 
 	{"Mikstura Zdrowia", 60, "   Leczy 25 + 7% maksymalnego ♥ podczas walki (maksymalnie leczy ♥ 250) "},
-	{"Eliksir Precyzji", 280, "   Zwiększa twoją szanse na atak o 50% na 7 tur (nie stackuje się)"},
-	{"Koktajl Wampira", 200, "   Leczysz się za 10% zadanych obrażeń na 10 tur (nie stackuje się) "}
+	{"Eliksir Precyzji", 120, "   Zwiększa twoją szanse na atak o 50% na 7 tur (nie stackuje się)"},
+	{"Koktajl Wampira", 150, "   Leczysz się za 10% zadanych obrażeń na 10 tur (nie stackuje się) "}
 };
 
-// Przedmioty magiczne - max 6 slotów
+// Przedmioty magiczne - std::max 6 slotów
 magic_item_def magic_items[] = {
 	// name,                  price, mana, sp, mrpen, mr, base_regen_bonus, description
 	{"Zaklęta Księga",        300,   100,  50,  5,    0,   0,  "   +100 many, +50 siły zaklęć"},
@@ -187,3 +206,29 @@ const int magic_items_amount = sizeof(magic_items) / sizeof(magic_items[0]);
 InventoryWeapon inventory[max_inventory];
 
 int inventory_count = 0;
+
+// Overkill
+int overkill_stored = 0;
+bool overkill_armor_ignore = false;
+
+// Wampiryzm magiczny
+int player_spell_vamp = 0;
+const int MAX_SPELL_VAMP = 30;
+
+// Cooldowny spelli Zabójcy
+int cd_primal_strike = 0;
+int cd_undodgable_speed = 0;
+int cd_slayer_of_slowest = 0;
+
+// Cooldowny spelli Maga
+int cd_star_strike = 0;
+int cd_deadly_vines = 0;
+int cd_mirror_of_death = 0;
+
+// Aktywne efekty Zabójcy
+bool primal_strike_active = false;
+int undodgable_turns = 0;
+bool slayer_next_active = false;
+
+// Mirror of Death
+bool mirror_active = false;
