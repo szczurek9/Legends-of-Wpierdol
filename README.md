@@ -10,17 +10,17 @@ Turn-based fighting game running in your console! (made by MSLG Studios)
 - UI has become more colorful!
 ### *Become a Legend!*
 - Encounter harder enemies as the game goes on
-- Get new crazy weapons
+- Get new crazy weapons or use your spells to destroy everything!
 - WPIERDOL your enemies to show who is the boss
 - Fight with legends like Dante from DMC or Michael Jackson!
 ### *MORE content than before!*
-- 40 levels included
-- 21 weapons to purchase
+- 50 levels included
+- 28 weapons to purchase
 - Ability to increase your stats
 - More engaging gameplay!
 ### What are you waiting for? Download and play!
 System requierments:
-- Windows 10/11, Linux (through Wine), Android (Winlator 11 recommended)
+- Windows 10/11, Linux (through Wine), Android (Winlator 11 or newer recommended)
 - 1 MB free on your storage device
 
 Download through Releases on GitHub.
