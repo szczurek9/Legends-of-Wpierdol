@@ -54,18 +54,8 @@ void shop_buy_weapon(int id) {
 void game_shop() {
 	int choice = 0;
 	int keyboard_button;
-	const int visible_items = 10;
 
 	while (true) {
-		int start = 0;
-
-		if (choice >= visible_items)
-			start = choice - visible_items + 1;
-
-		int end = start + visible_items;
-
-		if (end > shop_weapon_amount)
-			end = shop_weapon_amount;
 		clear_screen();
 		std::cout << "ESC - Powrót\n\n";
 		std::cout << "\tSklep:\n\n";
@@ -81,7 +71,7 @@ void game_shop() {
 
 		std::cout << std::endl << std::endl;
 
-		for (int i = start; i < end; i++) {
+		for (int i = 0; i < shop_weapon_amount; i++) {
 
 			if (i == choice) {
 				std::cout << "\t►  ";
@@ -101,7 +91,6 @@ void game_shop() {
 
 			std::cout << std::endl;
 		}
-		std::cout << "\n\t[" << choice + 1 << "/" << shop_weapon_amount << "]";
 
 		keyboard_button = _getch();
 
@@ -436,21 +425,9 @@ void game_upgrades() {
 			break;
 
 			case 3:
-				if (player_armor_pen >= 70) {
-
-					clear_screen();
-
-					std::cout << "\n\tOsiągnięto maksymalny poziom przebicia pancerza!\n\n";
-
-					pause_game();
-					continue;
-				}
-
+				// Kolce Odwetu: +10 przebicia pancerza przeciwnika (limit 70)
 				player_armor_pen += 10;
-
-				if (player_armor_pen > 70)
-					player_armor_pen = 70;
-
+				if (player_armor_pen > 70) player_armor_pen = 70;
 				break;
 			}
 

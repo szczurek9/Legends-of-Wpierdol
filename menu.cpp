@@ -499,7 +499,7 @@ void game_armory() {
 
             std::cout << "ESC - Powrót\n\n";
 
-            print_colored("\tZbrojownia", COLOR_YELLOW);
+            print_colored("\t⚔ Zbrojownia ⚔", COLOR_YELLOW);
             std::cout << "\n\n";
 
             for (int i = 0; i < choice_amount; i++) {
