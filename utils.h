@@ -178,7 +178,7 @@ static void draw_player_mana_bar(int current, int maximum, int width = 20) {
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    print_colored("✦ [", COLOR_BLUE);
+    print_colored("◆ [", COLOR_BLUE);
 
     for (int i = 0; i < width; i++) {
 

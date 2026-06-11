@@ -54,8 +54,18 @@ void shop_buy_weapon(int id) {
 void game_shop() {
 	int choice = 0;
 	int keyboard_button;
+	const int visible_items = 10;
 
 	while (true) {
+		int start = 0;
+
+		if (choice >= visible_items)
+			start = choice - visible_items + 1;
+
+		int end = start + visible_items;
+
+		if (end > shop_weapon_amount)
+			end = shop_weapon_amount;
 		clear_screen();
 		std::cout << "ESC - Powrót\n\n";
 		std::cout << "\tSklep:\n\n";
@@ -71,7 +81,7 @@ void game_shop() {
 
 		std::cout << std::endl << std::endl;
 
-		for (int i = 0; i < shop_weapon_amount; i++) {
+		for (int i = start; i < end; i++) {
 
 			if (i == choice) {
 				std::cout << "\t►  ";
@@ -91,6 +101,7 @@ void game_shop() {
 
 			std::cout << std::endl;
 		}
+		std::cout << "\n\t[" << choice + 1 << "/" << shop_weapon_amount << "]";
 
 		keyboard_button = _getch();
 
@@ -425,9 +436,21 @@ void game_upgrades() {
 			break;
 
 			case 3:
-				// Kolce Odwetu: +10 przebicia pancerza przeciwnika (limit 70)
+				if (player_armor_pen >= 70) {
+
+					clear_screen();
+
+					std::cout << "\n\tOsiągnięto maksymalny poziom przebicia pancerza!\n\n";
+
+					pause_game();
+					continue;
+				}
+
 				player_armor_pen += 10;
-				if (player_armor_pen > 70) player_armor_pen = 70;
+
+				if (player_armor_pen > 70)
+					player_armor_pen = 70;
+
 				break;
 			}
 
@@ -840,34 +863,34 @@ void choose_player_class() {
 		std::cout << "\t+15 pancerza\n\n";
 		pause_game();
 		break;
-	/*
-	case 2: // Tank
-		player_class = CLASS_TANK;
-		// +150 HP na start
-		player_maxhealth += 150;
-		player_health += 150;
-		// Wiekszy cap pancerza (120 zamiast 90) - obsługiwane w logice zakupu
-		// -25% dmg dla broni powyżej 500 DMG - obsługiwane w walce
-		clear_screen();
-		std::cout << "\n\t";
-		print_colored("Klasa: Tank\n", COLOR_YELLOW);
-		std::cout << "\t+150 HP (250 łącznie)\n";
-		std::cout << "\tMaksymalny pancerz: 120\n";
-		std::cout << "\t-25% obrażeń broń powyżej 500 DMG\n\n";
-		pause_game();
-		break;
+		/*
+		case 2: // Tank
+			player_class = CLASS_TANK;
+			// +150 HP na start
+			player_maxhealth += 150;
+			player_health += 150;
+			// Wiekszy cap pancerza (120 zamiast 90) - obsługiwane w logice zakupu
+			// -25% dmg dla broni powyżej 500 DMG - obsługiwane w walce
+			clear_screen();
+			std::cout << "\n\t";
+			print_colored("Klasa: Tank\n", COLOR_YELLOW);
+			std::cout << "\t+150 HP (250 łącznie)\n";
+			std::cout << "\tMaksymalny pancerz: 120\n";
+			std::cout << "\t-25% obrażeń broń powyżej 500 DMG\n\n";
+			pause_game();
+			break;
 
-	case 3: // Wojownik
-		player_class = CLASS_WARRIOR;
-		player_class_bonus_ad = 10;   // trochę bonus AD
-		player_armor += 10;           // trochę pancerza na start
-		clear_screen();
-		std::cout << "\n\t";
-		print_colored("Klasa: Wojownik\n", COLOR_GREEN);
-		std::cout << "\t+10 bonus AD\n";
-		std::cout << "\t+10 pancerza na start\n\n";
-		pause_game();
-		break;
-	*/
+		case 3: // Wojownik
+			player_class = CLASS_WARRIOR;
+			player_class_bonus_ad = 10;   // trochę bonus AD
+			player_armor += 10;           // trochę pancerza na start
+			clear_screen();
+			std::cout << "\n\t";
+			print_colored("Klasa: Wojownik\n", COLOR_GREEN);
+			std::cout << "\t+10 bonus AD\n";
+			std::cout << "\t+10 pancerza na start\n\n";
+			pause_game();
+			break;
+		*/
 	}
 }
