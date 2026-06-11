@@ -15,7 +15,7 @@ Turn-based fighting game running in your console! (made by MSLG Studios)
 - Fight with legends like Dante from DMC or Michael Jackson!
 ### *MORE content than before!*
 - 50 levels included
-- 28 weapons to purchase
+- 26 weapons to purchase
 - Ability to increase your stats
 - More engaging gameplay!
 ### What are you waiting for? Download and play!
