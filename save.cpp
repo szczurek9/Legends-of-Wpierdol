@@ -36,6 +36,7 @@ void save_game() {
 
     file << player_armor << std::endl;
     file << player_second_breath << std::endl;
+    file << player_escape_count << std::endl;
 
     file << player_health_potion << std::endl;
 
@@ -124,6 +125,7 @@ bool load_game() {
 
     file >> player_armor;
     file >> player_second_breath;
+    file >> player_escape_count;
 
     file >> player_health_potion;
 
