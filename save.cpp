@@ -1,210 +1,193 @@
 #include "save.h"
 #include "globals.h"
 #include "utils.h"
+#include "battle.h"
 #include <fstream>
 #include <iostream>
 
-
-bool save_exists() {
-
-    std::ifstream file("save.LoW_save");
-    return file.good();
+bool save_exists()
+{
+	std::ifstream file("save.LoW_save");
+	return file.good();
 }
 
-void save_game() {
+void save_game()
+{
+	std::ofstream file("save.LoW_save");
+	if (!file)
+		return;
 
-    std::ofstream file("save.LoW_save");
+	file << nickname << "\n"
+		<< player_nickname_color << "\n";
+	file << player_level << "\n"
+		<< player_money << "\n";
+	file << player_health << "\n"
+		<< player_maxhealth << "\n";
+	file << player_weapon_name << "\n";
+	file << player_weapon_damage << "\n"
+		<< player_weapon_price << "\n";
+	file << player_lifesteal << "\n"
+		<< player_bonus_accuracy << "\n";
+	file << player_bonus_health << "\n";
+	file << player_armor << "\n"
+		<< player_second_breath << "\n"
+		<< player_escape_count << "\n";
+	file << player_health_potion << "\n";
+	file << player_accuracy_potion << "\n"
+		<< player_vampirism_potion << "\n";
+	file << accuracy_potion_bonus << "\n"
+		<< accuracy_potion_turns << "\n";
+	file << vampirism_potion_bonus << "\n"
+		<< vampirism_potion_turns << "\n";
+	file << player_crit_chance << "\n";
+	file << (int)player_class << "\n"
+		<< player_class_bonus_ad << "\n";
+	file << player_mana << "\n"
+		<< player_maxmana << "\n";
+	file << player_spell_power << "\n"
+		<< player_magic_resist_pen << "\n"
+		<< player_magic_resist << "\n";
+	file << player_armor_pen << "\n"
+		<< enemy_stun_turns << "\n";
 
-    if (!file)
-        return;
+	int max_slots = get_max_magic_items();
+	file << magic_item_count << "\n"
+		<< max_slots << "\n";
+	for (int i = 0; i < max_slots; i++)
+	{
+		file << magic_item_slots[i] << "\n";
+		file << adept_book_stacks[i] << "\n";
+		file << adept_book_upgraded[i] << "\n";
+	}
 
-    file << nickname << std::endl;
-    file << player_nickname_color << std::endl;
+	file << overkill_stored << "\n"
+		<< overkill_armor_ignore << "\n";
+	file << player_spell_vamp << "\n";
+	file << cd_primal_strike << "\n"
+		<< cd_undodgeable_speed << "\n"
+		<< cd_slayer_of_slowest << "\n";
+	file << cd_star_strike << "\n"
+		<< cd_deadly_vines << "\n"
+		<< cd_mirror_of_death << "\n";
+	file << cd_stone_bastion << "\n"
+		<< cd_accumulated_wrath << "\n"
+		<< cd_iron_taunt << "\n";
+	file << cd_kogeki_strike << "\n"
+		<< cd_mushin_ability << "\n";
+	file << primal_strike_active << "\n"
+		<< undodgeable_turns << "\n"
+		<< mirror_active << "\n";
+	file << tank_bastion_armor_turns << "\n"
+		<< tank_bastion_armor_bonus << "\n";
+	file << tank_wrath_stored << "\n"
+		<< tank_taunt_turns << "\n";
+	file << samurai_attack_counter << "\n"
+		<< sen_no_kata_active << "\n"
+		<< mushin_shield_active << "\n";
 
-    file << player_level << std::endl;
-    file << player_money << std::endl;
+	file << inventory_count << "\n";
+	for (int i = 0; i < inventory_count; i++)
+	{
+		file << inventory[i].name << "\n"
+			<< inventory[i].damage << "\n"
+			<< inventory[i].price << "\n";
+	}
 
-    file << player_health << std::endl;
-    file << player_maxhealth << std::endl;
-
-    file << player_weapon_name << std::endl;
-    file << player_weapon_damage << std::endl;
-    file << player_weapon_price << std::endl;
-
-    file << player_lifesteal << std::endl;
-    file << player_bonus_accuracy << std::endl;
-
-    file << player_armor << std::endl;
-    file << player_second_breath << std::endl;
-    file << player_escape_count << std::endl;
-
-    file << player_health_potion << std::endl;
-
-    file << player_precision_potion << std::endl;
-    file << player_vampire_potion << std::endl;
-
-    file << precision_bonus << std::endl;
-    file << precision_turns << std::endl;
-
-    file << vampire_bonus << std::endl;
-    file << vampire_turns << std::endl;
-
-    file << player_crit_chance << std::endl;
-
-    // Nowe zmienne: klasa, mana, magic stats
-    file << (int)player_class << std::endl;
-    file << player_class_bonus_ad << std::endl;
-    file << player_mana << std::endl;
-    file << player_maxmana << std::endl;
-    file << player_spell_power << std::endl;
-    file << player_magic_resist_pen << std::endl;
-    file << player_magic_resist << std::endl;
-    file << player_armor_pen << std::endl;
-    // enemy_armor_pen jest teraz polem w battle_enemy, nie trzeba zapisywać
-    file << enemy_stun_turns << std::endl;
-
-    // Sloty na itemy magiczne
-    file << magic_item_count << std::endl;
-    for (int i = 0; i < MAX_MAGIC_ITEMS; i++) {
-        file << magic_item_slots[i] << std::endl;
-    }
-
-    // Nowe zmienne v1.6: Overkill, Spell Vamp, cooldowny, aktywne efekty
-    file << overkill_stored << std::endl;
-    file << overkill_armor_ignore << std::endl;
-    file << player_spell_vamp << std::endl;
-    file << cd_primal_strike << std::endl;
-    file << cd_undodgable_speed << std::endl;
-    file << cd_slayer_of_slowest << std::endl;
-    file << cd_star_strike << std::endl;
-    file << cd_deadly_vines << std::endl;
-    file << cd_mirror_of_death << std::endl;
-    file << primal_strike_active << std::endl;
-    file << undodgable_turns << std::endl;
-    file << mirror_active << std::endl;
-
-    file << inventory_count << std::endl;
-
-    for (int i = 0; i < inventory_count; i++) {
-
-        file << inventory[i].name << std::endl;
-        file << inventory[i].damage << std::endl;
-        file << inventory[i].price << std::endl;
-    }
-
-    file.close();
+	file.close();
 }
 
-bool load_game() {
+bool load_game()
+{
+	std::ifstream file("save.LoW_save");
+	if (!file)
+		return false;
 
-    std::ifstream file("save.LoW_save");
+	std::getline(file, nickname);
+	file >> player_nickname_color;
+	file.ignore();
+	file >> player_level >> player_money;
+	file >> player_health >> player_maxhealth;
+	file.ignore();
+	std::getline(file, player_weapon_name);
+	file >> player_weapon_damage >> player_weapon_price;
+	file >> player_lifesteal >> player_bonus_accuracy;
+	file >> player_bonus_health;
+	file >> player_armor >> player_second_breath >> player_escape_count;
+	file >> player_health_potion;
+	file >> player_accuracy_potion >> player_vampirism_potion;
+	file >> accuracy_potion_bonus >> accuracy_potion_turns;
+	file >> vampirism_potion_bonus >> vampirism_potion_turns;
+	file >> player_crit_chance;
 
-    if (!file)
-        return false;
+	int class_int = 0;
+	if (!(file >> class_int))
+	{
+		file.close();
+		return true;
+	}
+	player_class = (PlayerClass)class_int;
+	file >> player_class_bonus_ad;
+	file >> player_mana >> player_maxmana;
+	file >> player_spell_power >> player_magic_resist_pen >> player_magic_resist;
+	file >> player_armor_pen >> enemy_stun_turns;
 
-    std::getline(file, nickname);
+	int saved_count = 0, saved_slots = 0;
+	if (!(file >> saved_count >> saved_slots))
+	{
+		file.close();
+		return true;
+	}
+	magic_item_count = saved_count;
+	// Inicjalizuj wszystkie sloty na -1
+	for (int i = 0; i < 8; i++)
+	{
+		magic_item_slots[i] = -1;
+		adept_book_stacks[i] = 0;
+		adept_book_upgraded[i] = false;
+	}
+	for (int i = 0; i < saved_slots && i < 8; i++)
+	{
+		file >> magic_item_slots[i] >> adept_book_stacks[i] >> adept_book_upgraded[i];
+	}
 
-    file >> player_nickname_color;
-    file.ignore();
+	int tmp;
+	file >> overkill_stored >> tmp;
+	overkill_armor_ignore = (bool)tmp;
+	file >> player_spell_vamp;
+	file >> cd_primal_strike >> cd_undodgeable_speed >> cd_slayer_of_slowest;
+	file >> cd_star_strike >> cd_deadly_vines >> cd_mirror_of_death;
+	file >> cd_stone_bastion >> cd_accumulated_wrath >> cd_iron_taunt;
+	file >> cd_kogeki_strike >> cd_mushin_ability;
+	file >> tmp;
+	primal_strike_active = (bool)tmp;
+	file >> undodgeable_turns;
+	file >> tmp;
+	mirror_active = (bool)tmp;
+	file >> tank_bastion_armor_turns >> tank_bastion_armor_bonus;
+	file >> tank_wrath_stored >> tank_taunt_turns;
+	file >> samurai_attack_counter;
+	file >> tmp;
+	sen_no_kata_active = (bool)tmp;
+	file >> tmp;
+	mushin_shield_active = (bool)tmp;
 
-    file >> player_level;
-    file >> player_money;
+	file >> inventory_count;
+	file.ignore();
+	for (int i = 0; i < inventory_count; i++)
+	{
+		std::getline(file, inventory[i].name);
+		file >> inventory[i].damage >> inventory[i].price;
+		file.ignore();
+	}
 
-    file >> player_health;
-    file >> player_maxhealth;
-
-    file.ignore();
-
-    std::getline(file, player_weapon_name);
-
-    file >> player_weapon_damage;
-    file >> player_weapon_price;
-
-    file >> player_lifesteal;
-    file >> player_bonus_accuracy;
-
-    file >> player_armor;
-    file >> player_second_breath;
-    file >> player_escape_count;
-
-    file >> player_health_potion;
-
-    file >> player_precision_potion;
-    file >> player_vampire_potion;
-
-    file >> precision_bonus;
-    file >> precision_turns;
-
-    file >> vampire_bonus;
-    file >> vampire_turns;
-
-    file >> player_crit_chance;
-
-    // Nowe zmienne (kompatybilność: jeśli nie ma - zostają domyślne wartości)
-    int class_int = 0;
-    if (file >> class_int) {
-        player_class = (PlayerClass)class_int;
-        file >> player_class_bonus_ad;
-        file >> player_mana;
-        file >> player_maxmana;
-        file >> player_spell_power;
-        file >> player_magic_resist_pen;
-        file >> player_magic_resist;
-        file >> player_armor_pen;
-        // enemy_armor_pen jest teraz polem w battle_enemy, nie trzeba wczytywać
-        file >> enemy_stun_turns;
-
-        file >> magic_item_count;
-        for (int i = 0; i < MAX_MAGIC_ITEMS; i++) {
-            file >> magic_item_slots[i];
-        }
-
-        // Nowe zmienne v1.6: Overkill, Spell Vamp, cooldowny, aktywne efekty
-        int ov_stored, ov_ignore, sv, cps, cus, css, css2, cdv, cmd, psa, ut, ma;
-        if (file >> ov_stored) {
-            overkill_stored = ov_stored;
-            file >> ov_ignore; overkill_armor_ignore = (bool)ov_ignore;
-            file >> sv;        player_spell_vamp = sv;
-            file >> cps;       cd_primal_strike = cps;
-            file >> cus;       cd_undodgable_speed = cus;
-            file >> css;       cd_slayer_of_slowest = css;
-            file >> css2;      cd_star_strike = css2;
-            file >> cdv;       cd_deadly_vines = cdv;
-            file >> cmd;       cd_mirror_of_death = cmd;
-            file >> psa;       primal_strike_active = (bool)psa;
-            file >> ut;        undodgable_turns = ut;
-            file >> ma;        mirror_active = (bool)ma;
-        }
-    }
-
-    file >> inventory_count;
-
-    file.ignore();
-
-    for (int i = 0; i < inventory_count; i++) {
-
-        std::getline(file, inventory[i].name);
-
-        file >> inventory[i].damage;
-        file >> inventory[i].price;
-
-        file.ignore();
-    }
-
-    file.close();
-
-    return true;
+	file.close();
+	return true;
 }
 
-void manual_save() {
-
-    clear_screen();
-
-    save_game();
-
-    std::cout << std::endl;
-    std::cout << "\tGra została zapisana!\n";
-    std::cout << std::endl;
-
-    pause_game();
+void manual_save()
+{
+	clear_screen();
+	save_game();
+	std::cout << "\n\tGra została zapisana!\n\n";
+	pause_game();
 }
