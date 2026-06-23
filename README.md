@@ -27,5 +27,5 @@ System requierments:
 Download through Releases on GitHub.
 You can get the source code in "master" branch of this repository
 
-[MSLG Launcher](https://github.com/MSLG-Studios/mslg-launcher/releases/tag/v1.0.0) 
-[MSLG Site](mslg-studios.github.io)
+Check out our [MSLG Launcher](https://github.com/MSLG-Studios/mslg-launcher/releases/tag/v1.0.0) 
+, and visit out [site](mslg-studios.github.io)
