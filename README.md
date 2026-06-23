@@ -9,6 +9,7 @@ Turn-based fighting game running in your console! (made by MSLG Studios)
 - NOW it has arrow choice selection! No more typing numbers!
 - UI has become more colorful!
 ### *Become a Legend!*
+- Choose your class: Be an Assasin, Mage, Tank or Samurai!
 - Encounter harder enemies as the game goes on
 - Get new crazy weapons or use your spells to destroy everything!
 - WPIERDOL your enemies to show who is the boss
@@ -21,7 +22,7 @@ Turn-based fighting game running in your console! (made by MSLG Studios)
 ### What are you waiting for? Download and play!
 System requierments:
 - Windows 10/11, Linux (through Wine), Android (Winlator 11 or newer recommended)
-- 1 MB free on your storage device
+- 2 MB free on your storage device
 
 Download through Releases on GitHub.
 You can get the source code in "master" branch of this repository
