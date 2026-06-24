@@ -125,7 +125,7 @@ extern int player_bonus_health;
 extern int player_bonus_accuracy;
 
 extern const int MAX_LIFESTEAL;
-extern const int MAX_ACCURACY;
+extern int MAX_ACCURACY;
 extern const int MAX_CRIT;
 
 extern int player_armor;
@@ -239,3 +239,4 @@ extern int samurai_attack_counter; // licznik ataków do pasywki (co 3. = stun)
 extern bool sen_no_kata_active;    // toggle Sen no Kata
 extern int cd_mushin_ability;
 extern bool mushin_shield_active; // aktywna redukcja Mushin (do następnego ataku wroga)
+

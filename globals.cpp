@@ -21,7 +21,7 @@ int player_magic_resist = 0;
 int player_armor_pen = 0;
 
 const int MAX_LIFESTEAL = 20;
-const int MAX_ACCURACY = 30;
+int MAX_ACCURACY = 30;
 const int MAX_CRIT = 100;
 
 bool player_second_breath = false;
@@ -169,19 +169,19 @@ consumable_item consumables[] = {
     {"Koktajl Wampira", 150, "   Leczysz się za 10% zadanych obrażeń na 10 tur (nie stackuje się)"} };
 
 // Przedmioty magiczne
-// Pola: name, price, mana, sp, mrpen, mr, regen_bonus, desc, discount_eligible,
+// Pola: name, price, mana, ap, mrpen, mr, regen_bonus, desc, discount_eligible,
 //        adept_ap_per_stack, adept_ap_max, adept_ap_upgraded_max, adept_upgrade_price, ap_multiplier
 magic_item_def magic_items[] = {
-    {"Zaklęta Księga", 300, 100, 50, 5, 0, 0,
-     "   +100 many, +50 siły zaklęć",
+    {"Zaklęta Księga", 300, 100, 50, 5, 0, 50,
+     "   +100 many, +50 siły zaklęć, +5 przebicia MR, +50% bazowej regeneracji many",
      true, 0, 0, 0, 0, 1.0f},
 
     {"Różdżka Zniszczenia", 500, 300, 120, 15, 0, 0,
-     "   +120 siły zaklęć, +300 many, +15 przebicia MR",
+     "   +180 siły zaklęć, +300 many, +15 przebicia MR",
      true, 0, 0, 0, 0, 1.0f},
 
-    {"Naszyjnik Uzdrowicielki", 220, 100, 5, 0, 0, 300,
-     "   +100 many, +5 siły zaklęć, +300% bazowej regeneracji many",
+    {"Naszyjnik Uzdrowicielki", 220, 100, 5, 0, 0, 280,
+     "   +100 many, +5 siły zaklęć, +280% bazowej regeneracji many",
      true, 0, 0, 0, 0, 1.0f},
 
     {"Tarcza Anioła", 450, 0, 0, 0, 30, 150,
@@ -194,8 +194,8 @@ magic_item_def magic_items[] = {
       true, 5, 30, 150, 55, 1.0f},
 
       // Kostur Zagłady: +20% całego AP (mnożnik), brak zniżki
-      {"Kostur Zagłady", 550, 0, 0, 0, 0, 0,
-       "   +20% całego AP (mnożnik końcowy)",
+      {"Kostur Zagłady", 600, 0, 160, 30, 0, 0,
+       "   +160 siły zaklęć, +30 przebicia MR, +20% całego AP (mnożnik końcowy)",
        false, 0, 0, 0, 0, 1.20f},
 };
 

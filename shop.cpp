@@ -236,6 +236,9 @@ void game_abilities()
 
 void game_upgrades()
 {
+	if (player_class == CLASS_SAMURAI) {
+		MAX_ACCURACY = 45;
+	}
 	int choice = 0, key;
 	while (true)
 	{
@@ -492,7 +495,7 @@ void game_magic_shop()
 		print_colored("\tMagiczny Rynek\n\n", COLOR_BLUE);
 		std::cout << "\t";
 		ui_colored("Hajs: $", player_money, COLOR_DARK_GREEN);
-		std::cout << "\n\t";
+		std::cout << " | ";
 		print_colored("Sloty: ", COLOR_BRIGHT_WHITE);
 		number_colored(magic_item_count, COLOR_CYAN);
 		std::cout << " / ";
@@ -502,19 +505,15 @@ void game_magic_shop()
 		number_colored(player_mana, COLOR_BLUE);
 		std::cout << " / ";
 		number_colored(player_maxmana, COLOR_BLUE);
-		std::cout << "\n\t";
+		std::cout << " | ";
 		print_colored("AP (łącznie): ", COLOR_PURPLE);
 		number_colored(get_total_ap(), COLOR_PURPLE);
 		std::cout << "\n\t";
 		print_colored("Przebicie MR: ", COLOR_DARK_CYAN);
 		number_colored(player_magic_resist_pen, COLOR_DARK_CYAN);
-		std::cout << "\n\t";
+		std::cout << " | ";
 		print_colored("MR gracza: ", COLOR_CYAN);
 		number_colored(player_magic_resist, COLOR_CYAN);
-		std::cout << "\n\t";
-		print_colored("Spell Vamp: ", COLOR_PURPLE);
-		number_colored(player_spell_vamp, COLOR_PURPLE);
-		print_colored("%", COLOR_PURPLE);
 		std::cout << "\n\n";
 
 		// Założone itemy
@@ -690,19 +689,12 @@ void game_magic_shop()
 // ===== WYBÓR KLASY =====
 void choose_player_class()
 {
-	const int N = 3;
-	std::string names[N] = {
-		"Zabójca - +10% dmg, +5% lifesteal, +10% acc, +10% many/kill, cap armor 60",
-		"Mag     - +100 many, +50% regen, 25% zniżki na itemy mag., +5 magic pen, +15 armor",
-		"Samuraj - +15% dmg, +10% dodge, +15% acc, cap armor 50  |  Tank - +200 HP, +20 armor, cap 120, -25% dmg bron>500" };
-	// Robimy 3 opcje: Zabójca, Mag, Samuraj+Tank razem jako dwa wybory na 2. ekranie
-	// Ale prościej: 4 opcje Zabójca/Mag/Tank/Samuraj
 	const int N2 = 4;
 	std::string names2[N2] = {
-		"Zabójca - +10% dmg, +5% lifesteal, +10% acc, +10% many/kill, cap armor 60",
-		"Mag     - +100 many, +50% regen, 25% zniżki na mag itemy, +5 magic pen, +15 armor",
-		"Tank    - +200 HP, +20 armor, cap armor 120, -25% dmg bron powyżej 500 dmg",
-		"Samuraj - +15% dmg, +15% acc, +10% dodge chance, cap armor 50" };
+		"🗡  Zabójca - +10% dmg, +5% lifesteal, +10% acc, +10% many/kill, cap armor 60",
+		"⭐ Mag     - +150 many, +125% mana regen, 25% zniżki na mag itemy, +5 magic pen, +15 armor",
+		"❤️ Tank    - +200 HP, +20 armor, cap armor 120, -25% dmg bron powyżej 500 dmg",
+		"⚔  Samuraj - +15% dmg, +15% acc, +10% dodge chance, cap armor 50" };
 
 	int choice = 0, key;
 	while (true)
@@ -758,14 +750,14 @@ void choose_player_class()
 
 	case 1: // Mag
 		player_class = CLASS_MAGE;
-		player_maxmana = 200;
-		player_mana = 200;
+		player_maxmana = 250;
+		player_mana = 250;
 		player_magic_resist_pen += 5;
 		player_armor += 15;
 		clear_screen();
 		std::cout << "\n\t";
 		print_colored("Klasa: Mag\n", COLOR_BLUE);
-		std::cout << "\t+100 many (200 łącznie)\n\t+50% bazowej regen many\n\t25% zniżka na itemy magiczne\n\t+5 przebicia MR\n\t+15 pancerza\n\n";
+		std::cout << "\t+150 many (250 łącznie)\n\t+125% bazowej regen many\n\t25% zniżka na itemy magiczne\n\t+5 przebicia MR\n\t+15 pancerza\n\n";
 		pause_game();
 		break;
 
@@ -786,13 +778,11 @@ void choose_player_class()
 		// +15% dmg: obsługiwane w walce jako *1.15f
 		// +15% accuracy
 		player_bonus_accuracy += 15;
-		// +10% dodge chance — zwiększamy player_atk_chance wroga (brak dedykowanej zmiennej dodge gracza,
-		// więc dodajemy jako bonus do accuracy = efektywny dodge)
-		player_bonus_accuracy += 10; // łącznie +25 accuracy = dodge bonusu gracza
+		MAX_ACCURACY = 45;
 		clear_screen();
 		std::cout << "\n\t";
 		print_colored("Klasa: Samuraj\n", COLOR_CYAN);
-		std::cout << "\t+15% obrażeń fizycznych\n\t+25 łącznego accuracy (15% acc + 10% dodge)\n\tMaks. pancerz: 50\n\tPasywka: co 3. atak stunuje (atak zadaje 10%+0.05%/AP max dmg)\n\n";
+		std::cout << "\t+15% obrażeń fizycznych\n\t+15% accuracy\n\tMaks. pancerz: 50\n\tPasywka: co 3. atak stunuje (atak zadaje 10%+0.05%/AP max dmg)\n\n";
 		pause_game();
 		break;
 	}

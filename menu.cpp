@@ -74,6 +74,7 @@ void debug_console()
 
 void game_menu()
 {
+
 	const int choice_amount = 4;
 
 	std::string choices[choice_amount] = {

@@ -57,7 +57,7 @@ void regen_mana()
 		}
 	}
 	if (player_class == CLASS_MAGE)
-		base_regen_bonus_pct += 50;
+		base_regen_bonus_pct += 125;
 	int base_regen = (int)(player_maxmana * 0.03f);
 	int bonus_regen = (base_regen * base_regen_bonus_pct) / 100;
 	player_mana += base_regen + bonus_regen;
@@ -179,9 +179,12 @@ void handle_wave_kill(int enemyIndex, float battle_seconds)
 {
 	float multiplier = 1.0f;
 	if (battle_seconds < 8)
-		multiplier = 1.5f;
+		multiplier = 1.15f;
 	else if (battle_seconds < 15)
-		multiplier = 1.2f;
+		multiplier = 1.05f;
+
+	if (player_level > 15)
+		multiplier = 1.0f;
 
 	int base_reward = enemy[enemyIndex].kill_reward;
 	int final_reward = (int)(base_reward * multiplier);
@@ -191,6 +194,14 @@ void handle_wave_kill(int enemyIndex, float battle_seconds)
 	if (player_class == CLASS_ASSASSIN)
 	{
 		int mana_restore = (int)(player_maxmana * 0.10f);
+		player_mana += mana_restore;
+		if (player_mana > player_maxmana)
+			player_mana = player_maxmana;
+	}
+
+	if (player_class == CLASS_MAGE)
+	{
+		int mana_restore = (int)(player_maxmana * 0.30f);
 		player_mana += mana_restore;
 		if (player_mana > player_maxmana)
 			player_mana = player_maxmana;
@@ -243,18 +254,18 @@ void handle_wave_kill(int enemyIndex, float battle_seconds)
 
 void cast_storm_breeze(int enemyIndex)
 {
-	const int cost = 30;
+	const int cost = 25;
 	if (player_mana < cost)
 	{
 		clear_screen();
 		std::cout << "\n\t";
-		print_colored("Za mało many! (30)\n\n", COLOR_RED);
+		print_colored("Za mało many! (25)\n\n", COLOR_RED);
 		pause_game();
 		return;
 	}
 	player_mana -= cost;
 	int ap = get_total_ap();
-	int raw = (int)(5 + ap * 0.10f);
+	int raw = (int)(15 + ap * 0.25f);
 	int dealt = deal_magic_damage(raw, enemyIndex);
 	current_enemy_health -= dealt;
 	adept_book_on_spell();
@@ -274,12 +285,12 @@ void cast_storm_breeze(int enemyIndex)
 
 void cast_star_strike(int enemyIndex)
 {
-	const int cost = 120;
+	const int cost = 100;
 	if (player_mana < cost)
 	{
 		clear_screen();
 		std::cout << "\n\t";
-		print_colored("Za mało many! (120)\n\n", COLOR_RED);
+		print_colored("Za mało many! (100)\n\n", COLOR_RED);
 		pause_game();
 		return;
 	}
@@ -296,7 +307,7 @@ void cast_star_strike(int enemyIndex)
 	player_mana -= cost;
 	cd_star_strike = 1;
 	int ap = get_total_ap();
-	int raw = (int)(25 + ap * 0.80f);
+	int raw = (int)(60 + ap * 0.90f);
 	int dealt = deal_magic_damage(raw, enemyIndex);
 	current_enemy_health -= dealt;
 	adept_book_on_spell();
@@ -316,12 +327,12 @@ void cast_star_strike(int enemyIndex)
 
 void cast_deadly_vines(int enemyIndex)
 {
-	const int cost = 80;
+	const int cost = 70;
 	if (player_mana < cost)
 	{
 		clear_screen();
 		std::cout << "\n\t";
-		print_colored("Za mało many! (80)\n\n", COLOR_RED);
+		print_colored("Za mało many! (70)\n\n", COLOR_RED);
 		pause_game();
 		return;
 	}
@@ -346,7 +357,7 @@ void cast_deadly_vines(int enemyIndex)
 	player_mana -= cost;
 	cd_deadly_vines = 4;
 	int ap = get_total_ap();
-	int raw = (int)(5 + ap * 0.03f);
+	int raw = (int)(10 + ap * 0.10f);
 	int dealt = deal_magic_damage(raw, enemyIndex);
 	current_enemy_health -= dealt;
 	enemy_stun_turns = 3;
@@ -404,6 +415,7 @@ void cast_mirror_of_death(int enemyIndex)
 	print_colored("Śmiertelne Lustro aktywowane!\n\t", COLOR_CYAN);
 	print_colored("Następny śmiertelny atak wroga zostanie odparty!\n\n", COLOR_CYAN);
 	pause_game();
+	return;
 }
 
 // =================================================================
@@ -437,6 +449,7 @@ void cast_primal_strike()
 	print_colored("Rzucono: Pierwotne Uderzenie!\n\t", COLOR_RED);
 	print_colored("Następny atak zawsze krytuje!\n\n", COLOR_PURPLE);
 	pause_game();
+	return;
 }
 
 void cast_undodgeable_speed()
@@ -469,6 +482,7 @@ void cast_undodgeable_speed()
 	print_colored("Rzucono: Nieomijalna Prędkość!\n\t", COLOR_CYAN);
 	print_colored("+25% accuracy gracza, -30% accuracy wroga na 3 tury!\n\n", COLOR_CYAN);
 	pause_game();
+	return;
 }
 
 // FIX: porównuje accuracy gracza z accuracy (dodge) przeciwnika
@@ -594,7 +608,7 @@ void cast_stone_bastion(int enemyIndex)
 	std::cout << "\n\t";
 	print_colored("Rzucono: Kamienny Bastion!\n\t", COLOR_YELLOW);
 	print_colored("Wróg ogłuszony na 2 tury!\n\t", COLOR_YELLOW);
-	print_colored("Bonus armor +2% za każdą turę efektu przez 5 tur!\n\n", COLOR_YELLOW);
+	print_colored("Bonus armor +2% za każdą turę efektu przez 5 tur do następnego otrzymanego damage!\n\n", COLOR_YELLOW);
 	pause_game();
 }
 
@@ -691,6 +705,7 @@ void cast_iron_taunt()
 	print_colored("-15% dodge szansy wroga\n\t", COLOR_CYAN);
 	print_colored("+10% accuracy gracza\n\n", COLOR_CYAN);
 	pause_game();
+	return;
 }
 
 // =================================================================
@@ -723,7 +738,7 @@ void cast_mushin()
 	adept_book_on_spell(5);
 	cd_mushin_ability = 1;
 	int ap = get_total_ap();
-	float heal_pct = 0.02f + (ap * 0.0005f); // 2% + 0.05% per AP
+	float heal_pct = 0.02f + (ap * 0.005f); // 2% + 0.05% per AP
 	int heal = (int)(player_maxhealth * heal_pct);
 	if (heal < 1)
 		heal = 1;
@@ -740,6 +755,7 @@ void cast_mushin()
 	print_colored(" HP!\n\t", COLOR_GREEN);
 	print_colored("Następny atak wroga zredukowany o 30%!\n\n", COLOR_CYAN);
 	pause_game();
+	return;
 }
 
 void cast_kogeki_strike(int enemyIndex)
@@ -816,16 +832,16 @@ void toggle_sen_no_kata()
 	std::cout << "\n\t";
 	if (sen_no_kata_active)
 	{
-		print_colored("Sen no Kata WŁĄCZONE!\n\t", COLOR_YELLOW);
-		print_colored("Każdy atak: +7.5% DMG, +4.5% otrzymywanego dmg.\n\t", COLOR_YELLOW);
-		print_colored("Pasywka stun (co 3. atak) jest wyłączona.\n\n", COLOR_GRAY);
+		print_colored("Sen no Kata - Chikara\n\t", COLOR_YELLOW);
+		print_colored("+7.5% DMG fizyczny na każdy atak, +4.5% otrzymywanego DMG.\n\n", COLOR_YELLOW);
 	}
 	else
 	{
-		print_colored("Sen no Kata WYŁĄCZONE!\n\t", COLOR_GRAY);
-		print_colored("Pasywka aktywna: co 3. atak stun (1 tura) + 10% DMG.\n\n", COLOR_GRAY);
+		print_colored("Sen no Kata - Bōei\n\t", COLOR_GRAY);
+		print_colored("Co 3. atak ogłusza wroga na 1 turę oraz zadaje 10% DMG max weapon damage.\n\n", COLOR_GRAY);
 	}
 	pause_game();
+	return;
 }
 
 // =================================================================
@@ -854,40 +870,54 @@ void battle_spells_mage(int enemyIndex, bool& spell_used)
 
 		// Powiew Burzy
 		s[0] = "Powiew Burzy [Magiczne]\n";
-		s[0] += "\t     Zadaje 5 (+10% AP) obrażeń. Koszt: 30 Mana";
+		s[0] += "\t     Zadaje 15 (+25% AP) obrażeń.\n";
+		s[0] += "\t		Koszt: 25 Mana";
 		if (player_mana < 30)
 			s[0] += "  [ZA MAŁO MANY]";
 
 		// Gwiezdne Uderzenie
 		s[1] = "Gwiezdne Uderzenie [Magiczne]\n";
-		s[1] += "\t     Zadaje 25 (+80% AP) obrażeń. Koszt: 120 Mana  CD: 1 tura";
-		if (cd_star_strike > 0)
-			s[1] += "  [CD: " + std::to_string(cd_star_strike) + " tur]";
-		else if (player_mana < 120)
+		s[1] += "\t     Zadaje 60 (+90% AP) obrażeń.\n";
+		s[1] += "\t		Koszt: 100 Mana ";
+		if (cd_star_strike > 0) {
+			s[1] += "  [CD: " + std::to_string(cd_star_strike) + "]";
+		} else {
+			s[1] += "  CD: 1 tura";
+		}
+		if (player_mana < 120)
 			s[1] += "  [ZA MAŁO MANY]";
 
 		// Zabójcze Pnącza
 		s[2] = "Zabójcze Pnącza [Magiczne]\n";
-		s[2] += "\t     Ogłusza na 3 tury. Podczas ogłuszenia zadaje 5 (+3% AP) obrażeń co turę. Koszt: 80 Mana  CD: 4 tury";
-		if (cd_deadly_vines > 0)
-			s[2] += "  [CD: " + std::to_string(cd_deadly_vines) + " tur]";
-		else if (enemy_stun_turns > 0)
-			s[2] += "  [PRZECIWNIK JUŻ OGŁUSZONY]";
-		else if (player_mana < 80)
+		s[2] += "\t     Ogłusza na 3 tury. Podczas ogłuszenia zadaje 10 (+10% AP) obrażeń co turę.\n";
+		s[2] += "\t		Koszt: 70 Mana ";
+		if (cd_deadly_vines > 0) {
+			s[2] += "  [CD: " + std::to_string(cd_deadly_vines) + "]";
+		}
+		else {
+			s[2] += "  CD: 4 tury";
+		}
+		if (enemy_stun_turns > 0)
+			s[2] += "  [AKTYWNE]";
+		if (player_mana < 80)
 			s[2] += "  [ZA MAŁO MANY]";
 
 		// Śmiertelne Lustro
 		s[3] = "Śmiertelne Lustro [Fizyczne]\n";
-		s[3] += "\t     Jeśli nast. atak wroga byłby śmiertelny: blokuje 99% DMG, odbija 5%, leczy 15% zablokowanego.\n";
-		s[3] += "\t     Jeśli nie śmiertelny: blokuje 10%, odbija 20% zablokowanego. Koszt: 50 Mana  CD: 5 tur";
+		s[3] += "\t     Jeśli nast. atak wroga byłby śmiertelny:\n";
+		s[3] += "\t		blokuje 99 % DMG, odbija 5 %, leczy 15 % zablokowanego.\n";
+		s[3] += "\t     Jeśli nie śmiertelny: blokuje 10%, odbija 20% zablokowanego.\n";
+		s[3] += "\t		Koszt: 50 Mana ";
 		if (mirror_active)
 			s[3] += "  [AKTYWNE]";
-		else if (cd_mirror_of_death > 0)
-			s[3] += "  [CD: " + std::to_string(cd_mirror_of_death) + " tur]";
-		else if (player_mana < 50)
+		if (cd_mirror_of_death > 0) {
+			s[3] += "  [CD: " + std::to_string(cd_mirror_of_death) + "]";
+		}
+		else {
+			s[3] += "  CD: 5 tur";
+		}
+		if (player_mana < 50)
 			s[3] += "  [ZA MAŁO MANY]";
-
-		s[4] = "Powrót";
 
 		for (int i = 0; i < N; i++)
 		{
@@ -976,7 +1006,11 @@ void battle_spells_assassin(int enemyIndex, bool& spell_used)
 
 		// Primal Strike
 		s[0] = "Primal Strike [Fizyczne]\n";
-		s[0] += "\t     Następny atak automatycznie trafia krytycznie. Koszt: 200 Mana";
+		s[0] += "\t		Pasywka: Nadmiar śmiertelnych obrazeń trafia do Overkill.\n";
+		s[0] += "\t		Gdy zebrane obrażenia przekroczą 50 % max health enemy, następny atak ignoruje 80 % armora.\n";
+		s[0] += "\t		Odzyskujesz HP z obrażeń Overkill (5% przechowanego damage +1%/0.7 armor pen, +1%/0.8 armor).\n";
+		s[0] += "\t     Manualne użycie: Nastepny atak krytuje. Jesli miał byc krytem, zadaje 2.25x dmg. \n";
+		s[0] += "\t		Koszt: 200 Mana";
 		if (primal_strike_active)
 			s[0] += "  [AKTYWNE]";
 		else if (player_mana < 200)
@@ -984,25 +1018,30 @@ void battle_spells_assassin(int enemyIndex, bool& spell_used)
 
 		// Un-Dodgable Speed
 		s[1] = "Un-Dodgable Speed [Utility]\n";
-		s[1] += "\t     +25% accuracy gracza, -30% accuracy wroga przez 3 tury. Koszt: 80 Mana  CD: 4 tury";
-		if (cd_undodgeable_speed > 0)
-			s[1] += "  [CD: " + std::to_string(cd_undodgeable_speed) + " tur]";
-		else if (player_mana < 80)
+		s[1] += "\t     +25% accuracy gracza, -30% accuracy wroga przez 3 tury.\n";
+		s[1] += "\t		Koszt: 80 Mana ";
+		if (cd_undodgeable_speed > 0) {
+			s[1] += "  [AKTYWNE! CD: " + std::to_string(cd_undodgeable_speed) + "]";
+		} else { 
+			s[1] += "  CD: 4 tury"; 
+		}
+		if (player_mana < 80)
 			s[1] += "  [ZA MAŁO MANY]";
-		if (undodgeable_turns > 0)
-			s[1] += "  [AKTYWNE: " + std::to_string(undodgeable_turns) + " tur]";
 
 		// Slayer of the Slowest
 		s[2] = "Slayer of the Slowest [Magiczne]\n";
 		s[2] += "\t     Działa gdy Twoje acc > acc wroga. Zadaje 1% (+0.8% per 750 DMG broni) max HP wroga\n";
-		s[2] += "\t     jako magic damage. Koszt: 20 Mana  CD: 1 tura";
+		s[2] += "\t     jako magic damage. Koszt: 20 Mana ";
 		s[2] += "  [Twoje acc: " + std::to_string(player_acc) + " | Acc wroga: " + std::to_string(enemy_acc) + "]";
-		if (cd_slayer_of_slowest > 0)
-			s[2] += "  [CD: " + std::to_string(cd_slayer_of_slowest) + " tur]";
-		else if (player_mana < 20)
-			s[2] += "  [ZA MAŁO MANY]";
 
-		s[3] = "Powrót";
+		if (cd_slayer_of_slowest > 0) {
+			s[2] += "  [CD: " + std::to_string(cd_slayer_of_slowest) + "]";
+		}
+		else {
+			s[2] += "  CD: 1 tura";
+		}
+		if (player_mana < 20)
+			s[2] += "  [ZA MAŁO MANY]";
 
 		for (int i = 0; i < N; i++)
 		{
@@ -1087,9 +1126,10 @@ void battle_spells_tank(int enemyIndex, bool& spell_used)
 		s[0] = "Kamienny Bastion [Utility]\n";
 		s[0] += "\t     Ogłusza wroga na 2 tury. Przez następne 5 tur kumuluje +2% armoru na turę.\n";
 		s[0] += "\t		Efekt zostaje przerwany przy otrzymaniu obrażeń od przeciwnika. Koszt : 50 Mana  CD : 1 tura";
-		if (cd_stone_bastion > 0)
+		if (cd_stone_bastion > 0) {
 			s[0] += "  [CD: " + std::to_string(cd_stone_bastion) + " tur]";
-		else if (player_mana < 50)
+		} else s[0] += "  CD : 1 tura";
+		if (player_mana < 50)
 			s[0] += "  [ZA MAŁO MANY]";
 		if (tank_bastion_armor_turns > 0)
 			s[0] += "  [KUMULUJE: " + std::to_string(tank_bastion_armor_turns) + " tur]";
@@ -1098,25 +1138,26 @@ void battle_spells_tank(int enemyIndex, bool& spell_used)
 		s[1] = "Skumulowany Gniew [Mag/Fiz/Utility]\n";
 		s[1] += "\t		Pasywnie: Kumuluje otrzymywany damage w gniew\n";
 		s[1] += "\t     Auto-trigger: gdy gniew >= 1.5x DMG broni — zadaje 70% gniewu jako fizyczny DMG, heal 35%, +bonus armor\n";
-		s[1] += "\t     Manualna aktywacja: 25% zebranego gniewu jest zadawane jako magic DMG + leczy 30% zebranego. Koszt: 50 Mana  CD: 2 tury";
-		if (cd_accumulated_wrath > 0)
+		s[1] += "\t     Manualna aktywacja: 25% zebranego gniewu jest zadawane jako magic DMG + leczy 30% zebranego. Koszt: 50 Mana ";
+		if (cd_accumulated_wrath > 0) {
 			s[1] += "  [CD: " + std::to_string(cd_accumulated_wrath) + " tur]";
-		else if (player_mana < 50)
+		} else s[1] += "  CD : 2 tura";
+		if (player_mana < 50)
 			s[1] += "  [ZA MAŁO MANY]";
 		else if (tank_wrath_stored <= 0)
 			s[1] += "  [BRAK GNIEWU]";
 
 		// Żelazna Prowokacja
-		s[2] = "Żelazna Prowokacja [Tank]\n";
-		s[2] += "\t     Przez 2 tury: redukcja broni wynosi -20% zamiast -25%, -15% dodge wroga, dostajesz +10% accuracy. Koszt: 45 Mana  CD: 2 tury (po wygaśnięciu)";
-		if (cd_iron_taunt > 0)
+		s[2] = "Żelazna Prowokacja [Utility]\n";
+		s[2] += "\t     Przez 2 tury: redukcja broni wynosi -20% zamiast -25%, -15% dodge wroga, dostajesz +10% accuracy. Koszt: 45 Mana ";
+		if (cd_iron_taunt > 0) {
 			s[2] += "  [CD: " + std::to_string(cd_iron_taunt) + " tur]";
-		else if (player_mana < 45)
+		}
+		else s[2] += "  CD: 2 tury (po wygaśnięciu)";
+		if (player_mana < 45)
 			s[2] += "  [ZA MAŁO MANY]";
 		if (tank_taunt_turns > 0)
 			s[2] += "  [AKTYWNE: " + std::to_string(tank_taunt_turns) + " tur]";
-
-		s[3] = "Powrót";
 
 		for (int i = 0; i < N; i++)
 		{
@@ -1196,35 +1237,35 @@ void battle_spells_samurai(int enemyIndex, bool& spell_used)
 		std::cout << "  |  ";
 		print_colored("Licznik atakow: ", COLOR_YELLOW);
 		number_colored(samurai_attack_counter, COLOR_YELLOW);
-		std::cout << "/3\n\n";
+		print_colored("/3", COLOR_YELLOW);
+		std::cout << "\n\n";
 
 		int ap = get_total_ap();
 		std::string s[N];
 
 		// Mushin
-		s[0] = "Mushin [Samuraj]\n";
-		s[0] += "\t     Leczy " + std::to_string((int)((0.02f + ap * 0.0005f) * 100)) + "% (+0.05% per AP) max HP. Następny atak wroga zredukowany o 30% DMG. Koszt: 50 Mana  CD: 1 tura";
+		s[0] = "Mushin [Utility]\n";
+		s[0] += "\t     Leczy " + std::to_string((int)((0.02f + ap * 0.005f) * 100)) + "% (+0.05% per AP) max HP. Następny atak wroga zredukowany o 30% DMG. Koszt: 50 Mana  CD: 1 tura";
 		if (cd_mushin_ability > 0)
 			s[0] += "  [CD: " + std::to_string(cd_mushin_ability) + " tur]";
 		else if (player_mana < 50)
 			s[0] += "  [ZA MAŁO MANY]";
 
 		// Sen no Kata
-		s[1] = "Sen no Kata [Samuraj] — Toggle (bez many i CD)\n";
+		s[1] = "Sen no Kata [Fizyczne] — Toggle (bez many i CD)\n";
 		if (sen_no_kata_active)
 			s[1] += "\t     Chikara: +7.5% DMG fizyczny na każdy atak, +4.5% otrzymywanego DMG. Pasywka stun wyłączona.";
 		else
 			s[1] += "\t     Bōei: co 3. atak ogłusza wroga na 1 turę oraz zadaje 10% DMG max weapon damage.";
 
 		// Kogeki
-		s[2] = "Kōgeki [Samuraj]\n";
-		s[2] += "\t     Normalny atak fizyczny + 50% base weapon DMG jako magic damage. Koszt: 30 Mana  CD: 2 tury";
-		if (cd_kogeki_strike > 0)
+		s[2] = "Kōgeki [Magiczne/Fizyczne]\n";
+		s[2] += "\t     Normalny atak fizyczny + 50% base weapon DMG jako magic damage. Koszt: 30 Mana ";
+		if (cd_kogeki_strike > 0) {
 			s[2] += "  [CD: " + std::to_string(cd_kogeki_strike) + " tur]";
-		else if (player_mana < 30)
+		} else s[2] += "  CD: 2 tury";
+		if (player_mana < 30)
 			s[2] += "  [ZA MAŁO MANY]";
-
-		s[3] = "Powrot";
 
 		for (int i = 0; i < N; i++)
 		{
@@ -1446,7 +1487,7 @@ bool do_player_attack(int enemyIndex)
 	print_colored("Twoja tura!\n\n\t", COLOR_BRIGHT_WHITE);
 	if (samurai_passive_stun)
 	{
-		print_colored("PASYWKA SAMURAJA: Ogłuszający cios!\n\t", COLOR_YELLOW);
+		print_colored("Sen no Kata - Bōei: Ogłuszający cios!\n\t", COLOR_YELLOW);
 		print_colored("(Atak zredukowany, wróg ogłuszony na 1 turę)\n\t", COLOR_YELLOW);
 	}
 	if (super_crit)
@@ -1897,7 +1938,7 @@ void game_battle()
 			std::cout << "\n\t";
 			print_colored("[Nieomijalna Prędkość:", COLOR_CYAN);
 			number_colored(undodgeable_turns, COLOR_CYAN);
-			print_colored("t]", COLOR_CYAN);
+			print_colored("]", COLOR_CYAN);
 		}
 		if (overkill_stored > 0)
 		{
@@ -1934,7 +1975,7 @@ void game_battle()
 		if (sen_no_kata_active)
 		{
 			std::cout << "\n\t";
-			print_colored("[Sen no Kata - Chikara]", COLOR_YELLOW);
+			print_colored("[Sen no Kata - Chikara]", COLOR_RED);
 		}
 		if (mushin_shield_active)
 		{
@@ -1943,12 +1984,13 @@ void game_battle()
 		}
 		if (player_class == CLASS_SAMURAI)
 		{
-			std::cout << "\n\t";
-			print_colored("[Sen no Kata - Bōei]", COLOR_YELLOW);
-			std::cout << "\n\t";
-			print_colored("[Licznik ataków:", COLOR_GRAY);
-			number_colored(samurai_attack_counter, COLOR_GRAY);
-			print_colored("/3]", COLOR_GRAY);
+			if (sen_no_kata_active == false) {
+				std::cout << "\n\t";
+				print_colored("[Sen no Kata - Bōei]", COLOR_GREEN);
+				print_colored("[Atak: ", COLOR_GRAY);
+				number_colored(samurai_attack_counter, COLOR_GRAY);
+				print_colored("/3]", COLOR_GRAY);
+			}
 		}
 
 		std::cout << "\n\n";
